@@ -6,6 +6,11 @@ from django.db import models
 # Create your models here.
 
 
+class Person(models.Model):
+    first_name = CharField(max_length=200)
+    last_name = CharField(max_length=200)
+
+
 class StatusChoices(Enum):
     Accepted = "ACCEPTED"
     Pending = "PENDING"
@@ -17,7 +22,7 @@ class StatusChoices(Enum):
 
 class Bid(models.Model):
     # a bidder can have many bids but a bid has only one bidder
-    bidder = models.ForeignKey(User, on_delete=models.CASCADE)
+    bidder = models.ForeignKey(Person, on_delete=models.CASCADE)
     # Will create timestamp when the object is created
     timestamp = models.DateTimeField(auto_now_add=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -36,7 +41,7 @@ class Furniture(models.Model):
     name = models.CharField(max_length=128)
     current_bid_id = models.OneToOneField(Bid, on_delete=models.PROTECT)
     seller = models.ForeignKey(
-        User,
+        Person,
         related_name='seller',
         on_delete=models.CASCADE,
     )
@@ -44,7 +49,7 @@ class Furniture(models.Model):
     category = models.ManyToManyField(Category)
 
     buyer = models.ForeignKey(
-        User, related_name='buyer', on_delete=models.PROTECT)
+        Person, related_name='buyer', on_delete=models.PROTECT)
     timestamp = models.DateTimeField(auto_now_add=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
