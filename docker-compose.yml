@@ -1,0 +1,18 @@
+version: "3"
+services:
+
+  microservices:
+    image: tp33/django
+    container_name: microservices
+    external_links:
+      - mysql:db
+    volumes:
+      - ./microservices:/app
+    ports:
+      - "8001:8000"
+    networks:
+      - backend
+    command: bash -c "mod_wsgi-express start-server --working-directory . --reload-on-changes ./microservices/wsgi.py"
+
+networks:
+  backend:
