@@ -1,0 +1,53 @@
+[
+    {
+        "model": "models.person",
+        "pk": 1,
+        "fields": {
+            "first_name": "Junie",
+            "last_name": "Jones"
+        }
+    },
+    {
+        "model": "models.category",
+        "pk": 2,
+        "fields": {
+            "category": "chair"
+        }
+    },
+    {
+        "model": "models.person",
+        "pk": 4,
+        "fields": {
+            "first_name": "Stuart",
+            "last_name": "Little"
+        }
+    },
+    {
+        "model": "models.furniture",
+        "pk": 3,
+        "fields": {
+            "name": "Pink chair",
+            "current_bid_id": 5,
+            "seller": 1,
+            "is_bought": "True",
+            "category": [
+                2
+            ],
+            "buyer": 4,
+            "timestamp": "2013-01-10T08:16:59.844Z",
+            "price": "50.50",
+            "description": "Buy my cool, pink chair! :P"
+        }
+    },
+    {
+        "model": "models.bid",
+        "pk": 5,
+        "fields": {
+            "bidder": 4,
+            "timestamp": "2013-01-16T08:16:59.844Z",
+            "price": "50.50",
+            "item_id": 3,
+            "status": "ACCEPTED"
+        }
+    }
+]
