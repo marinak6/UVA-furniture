@@ -46,8 +46,7 @@
             "bidder": 4,
             "timestamp": "2013-01-16T08:16:59.844Z",
             "price": "50.50",
-            "item_id": 3,
-            "status": "ACCEPTED"
+            "item_id": 3
         }
     }
 ]
