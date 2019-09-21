@@ -8,5 +8,7 @@ urlpatterns = [
     path('bid/create/', views.createBid, name='create-bid'),
     path('furniture/create/', csrf_exempt(views.createFurniture),
          name='createFurniture'),
+    path('furniture/<int:id>', csrf_exempt(views.furniture),
+         name='furniture'),
 
 ]
