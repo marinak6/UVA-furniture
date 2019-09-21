@@ -2,6 +2,7 @@ from django.db.models import CharField, Model
 from enum import Enum
 from django.contrib.auth.models import User
 from django.db import models
+from datetime import datetime
 
 # Create your models here.
 
@@ -22,11 +23,13 @@ class StatusChoices(Enum):
 
 class Bid(models.Model):
     # a bidder can have many bids but a bid has only one bidder
-    bidder = models.ForeignKey(Person, on_delete=models.CASCADE)
+    bidder = models.ForeignKey(
+        Person, on_delete=models.CASCADE, null=True, blank=True)
     # Will create timestamp when the object is created
     timestamp = models.DateTimeField(auto_now_add=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    item_id = models.OneToOneField('Furniture', on_delete=models.PROTECT)
+    item_id = models.OneToOneField(
+        'Furniture', on_delete=models.PROTECT, null=True, blank=True,)
     status = models.CharField(max_length=20, choices=StatusChoices.choices())
 
 
@@ -39,7 +42,8 @@ class Category(models.Model):
 
 class Furniture(models.Model):
     name = models.CharField(max_length=128)
-    current_bid_id = models.OneToOneField(Bid, on_delete=models.PROTECT)
+    current_bid_id = models.OneToOneField(
+        Bid, on_delete=models.CASCADE, null=True, blank=True,)
     seller = models.ForeignKey(
         Person,
         related_name='seller',
@@ -49,8 +53,9 @@ class Furniture(models.Model):
     category = models.ManyToManyField(Category)
 
     buyer = models.ForeignKey(
-        Person, related_name='buyer', on_delete=models.PROTECT)
-    timestamp = models.DateTimeField(auto_now_add=True)
+        Person, related_name='buyer', on_delete=models.PROTECT, null=True, blank=True,)
+    timestamp = models.DateTimeField(default=datetime.now)
+
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     description = models.TextField()
