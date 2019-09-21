@@ -2,6 +2,7 @@ from django.db.models import CharField, Model
 from enum import Enum
 from django.contrib.auth.models import User
 from django.db import models
+from datetime import datetime
 
 # Create your models here.
 
@@ -53,7 +54,8 @@ class Furniture(models.Model):
 
     buyer = models.ForeignKey(
         Person, related_name='buyer', on_delete=models.PROTECT, null=True, blank=True,)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(default=datetime.now)
+
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     description = models.TextField()

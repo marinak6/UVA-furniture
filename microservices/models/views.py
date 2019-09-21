@@ -68,7 +68,7 @@ def furniture(request, id):
             "is_bought": obj_dict["is_bought"],
             "category": category,
             "buyer_id": obj_dict["buyer"],
-            # "timestamp": obj_dict["timestamp"],
+            "timestamp": obj_dict["timestamp"],
             "price": obj_dict["price"],
             "description": obj_dict["description"],
         }
