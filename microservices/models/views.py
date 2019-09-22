@@ -21,12 +21,11 @@ def createFurniture(request):
             name = received_json_data["name"]
             seller_id = received_json_data['seller']
             is_bought = received_json_data['is_bought']
-            category_name = received_json_data['category']
+            category_names = received_json_data['category']
             description = received_json_data["description"]
             price = received_json_data["price"]
 
             seller = Person.objects.get(id=seller_id)
-            category = Category.objects.get(category=category_name)
 
             obj = Furniture.objects.create(
                 name=name,
@@ -37,9 +36,11 @@ def createFurniture(request):
                 description=description,
                 price=price,
             )
-            obj.category.add(category)
+            for category_name in category_names:
+                category = Category.objects.get(category=category_name)
+                obj.category.add(category)
+
             obj.save()
-            obj_dict = model_to_dict(obj)
             return JsonResponse({"Status": "Sucess"})
         except:
             return JsonResponse({"Status": "Something went wrong"})
