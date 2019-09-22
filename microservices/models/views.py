@@ -107,7 +107,6 @@ def update_furniture(request, id):
                 value = received_json_data[key]
                 setattr(obj, key, value)
         obj.save()
-        obj_dict = model_to_dict(obj)
         return JsonResponse({"Staus": "Updated"})
     except:
         return JsonResponse({"Status": "Something went wrong"})
