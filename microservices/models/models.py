@@ -24,12 +24,12 @@ class StatusChoices(Enum):
 class Bid(models.Model):
     # a bidder can have many bids but a bid has only one bidder
     bidder = models.ForeignKey(
-        Person, on_delete=models.CASCADE, null=True, blank=True)
+        Person, on_delete=models.CASCADE)
     # Will create timestamp when the object is created
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(default=datetime.now)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     item_id = models.OneToOneField(
-        'Furniture', on_delete=models.PROTECT, null=True, blank=True,)
+        'Furniture', on_delete=models.PROTECT)
     status = models.CharField(max_length=20, choices=StatusChoices.choices())
 
 

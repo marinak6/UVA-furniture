@@ -47,6 +47,7 @@ def createFurniture(request):
         return JsonResponse({"Status": "Something went wrong"})
 
 
+@csrf_exempt
 def furniture(request, id):
 
     if request.method == "GET":
@@ -76,3 +77,46 @@ def furniture(request, id):
             return JsonResponse(return_dict)
         except:
             return JsonResponse({"Status": "Something went wrong"})
+
+
+@csrf_exempt
+def update_furniture(request, id):
+    try:
+        obj = Furniture.objects.get(pk=id)
+        received_json_data = json.loads(request.body.decode("utf-8"))
+        for key in received_json_data:
+            if key == "current_bid_id":
+                value = Bid.objects.get(id=received_json_data[key])
+                setattr(obj, key, value)
+
+            elif key == "seller":
+                value = Person.objects.get(id=received_json_data[key])
+                setattr(obj, key, value)
+
+            elif key == "category":
+                value = []
+                obj.category.clear()
+                for item in received_json_data["category"]:
+                    category = Category.objects.get(category=item)
+                    obj.category.add(category)
+            elif key == "buyer_id":
+                value = Person.objects.get(id=received_json_data[key])
+                setattr(obj, key, value)
+            else:
+                value = received_json_data[key]
+                setattr(obj, key, value)
+        obj.save()
+        obj_dict = model_to_dict(obj)
+        return JsonResponse({"Staus": "Updated"})
+    except:
+        return JsonResponse({"Status": "Something went wrong"})
+
+
+@csrf_exempt
+def delete_furniture(request, id):
+    try:
+        obj = Furniture.objects.get(pk=id)
+        obj.delete()
+        return JsonResponse({"Status": "Deleted"})
+    except:
+        return JsonResponse({"Status": "Furniture with that ID does not exist"})

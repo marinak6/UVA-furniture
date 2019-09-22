@@ -10,5 +10,8 @@ urlpatterns = [
          name='createFurniture'),
     path('furniture/<int:id>', csrf_exempt(views.furniture),
          name='furniture'),
-
+    path('furniture/<int:id>/update', csrf_exempt(views.update_furniture),
+         name='update_furniture'),
+    path('furniture/<int:id>/delete', csrf_exempt(views.delete_furniture),
+         name='delete_furniture'),
 ]
