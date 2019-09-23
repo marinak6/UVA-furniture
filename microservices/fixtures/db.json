@@ -48,5 +48,138 @@
             "price": "50.50",
             "item_id": 3
         }
+    },
+    {
+        "model": "models.person",
+        "pk": 6,
+        "fields": {
+            "first_name": "Park",
+            "last_name": "Jones"
+        }
+    },
+    {
+        "model": "models.person",
+        "pk": 7,
+        "fields": {
+            "first_name": "Conan",
+            "last_name": "Gray"
+        }
+    },
+    {
+        "model": "models.person",
+        "pk": 8,
+        "fields": {
+            "first_name": "Cat",
+            "last_name": "Creature"
+        }
+    },
+    {
+        "model": "models.furniture",
+        "pk": 9,
+        "fields": {
+            "name": "Blue table",
+            "current_bid_id": 17,
+            "seller": 6,
+            "is_bought": "False",
+            "category": [
+                2
+            ],
+            "buyer": 4,
+            "timestamp": "2013-01-12T08:16:59.844Z",
+            "price": "28.50",
+            "description": "Buy my cool, blue table!"
+        }
+    },
+    {
+        "model": "models.furniture",
+        "pk": 10,
+        "fields": {
+            "name": "litter box",
+            "current_bid_id": 18,
+            "seller": 8,
+            "is_bought": "True",
+            "category": [
+                15
+            ],
+            "buyer": 4,
+            "timestamp": "2013-01-09T08:16:59.844Z",
+            "price": "999.99",
+            "description": ""
+        }
+    },
+    {
+        "model": "models.furniture",
+        "pk": 11,
+        "fields": {
+            "name": "Red bed",
+            "current_bid_id": 16,
+            "seller": 6,
+            "is_bought": "True",
+            "category": [
+                13
+            ],
+            "buyer": 8,
+            "timestamp": "2013-01-10T08:16:59.844Z",
+            "price": "50.50",
+            "description": "Bed is new! :P"
+        }
+    },
+    {
+        "model": "models.category",
+        "pk": 12,
+        "fields": {
+            "category": "table"
+        }
+    },
+    {
+        "model": "models.category",
+        "pk": 13,
+        "fields": {
+            "category": "bed"
+        }
+    },
+    {
+        "model": "models.category",
+        "pk": 14,
+        "fields": {
+            "category": "couch"
+        }
+    },
+    {
+        "model": "models.category",
+        "pk": 15,
+        "fields": {
+            "category": "accessories"
+        }
+    },
+    {
+        "model": "models.bid",
+        "pk": 16,
+        "fields": {
+            "bidder": 8,
+            "timestamp": "2013-01-20T08:16:59.844Z",
+            "price": "50.60",
+            "item_id": 11
+        }
+    },
+    {
+        "model": "models.bid",
+        "pk": 17,
+        "fields": {
+            "bidder": 4,
+            "timestamp": "2013-01-26T08:16:59.844Z",
+            "price": "50.50",
+            "item_id": 9
+        }
+    },
+    {
+        "model": "models.bid",
+        "pk": 18,
+        "fields": {
+            "bidder": 7,
+            "timestamp": "2013-01-16T08:16:59.844Z",
+            "price": "50.50",
+            "item_id": 10
+        }
     }
 ]
