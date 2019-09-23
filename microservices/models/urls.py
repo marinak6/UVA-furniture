@@ -5,7 +5,10 @@ from django.views.decorators.csrf import csrf_exempt
 
 app_name = 'models'
 urlpatterns = [
-    path('bid/create/', views.createBid, name='create-bid'),
+    path('bid/create', csrf_exempt(views.createBid), name='create-bid'),
+    path('bid/<int:id>', csrf_exempt(views.bid), name='bid'),
+    path('bid/<int:id>/delete', csrf_exempt(views.deleteBid), name='delete-bid'),
+    path('bid/<int:id>/update', csrf_exempt(views.updateBid), name='update-bid'),
     path('furniture/create', csrf_exempt(views.createFurniture),
          name='createFurniture'),
     path('furniture/<int:id>', csrf_exempt(views.furniture),
