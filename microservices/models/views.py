@@ -26,7 +26,13 @@ def createFurniture(request):
             price = received_json_data["price"]
 
             seller = Person.objects.get(id=seller_id)
+            if not seller:
+                return JsonResponse({"Status": "Seller is Invalid"})
+            if not (is_bought == "True" or is_bought == "False"):
+                return JsonResponse({"Status": "is_bought is Invalid"})
 
+            if type(category_names) != list:
+                return JsonResponse({"Status": "Category needs to be in a list"})
             obj = Furniture.objects.create(
                 name=name,
                 current_bid_id=None,
@@ -43,7 +49,7 @@ def createFurniture(request):
             obj.save()
             return JsonResponse({"Status": "Sucess"})
         except:
-            return JsonResponse({"Status": "Something went wrong"})
+            return JsonResponse({"Status": "Invalid ID"})
     else:
         return JsonResponse({"Status": "Something went wrong"})
 
@@ -77,7 +83,7 @@ def furniture(request, id):
             }
             return JsonResponse(return_dict)
         except:
-            return JsonResponse({"Status": "Something went wrong"})
+            return JsonResponse({"Status": "Invalid furniture ID"})
 
 
 @csrf_exempt
@@ -95,6 +101,8 @@ def update_furniture(request, id):
                 setattr(obj, key, value)
 
             elif key == "category":
+                if type(received_json_data["category"]) != list:
+                    return JsonResponse({"Status": "Category needs to be in a list"})
                 value = []
                 obj.category.clear()
                 for item in received_json_data["category"]:
@@ -109,7 +117,7 @@ def update_furniture(request, id):
         obj.save()
         return JsonResponse({"Staus": "Updated"})
     except:
-        return JsonResponse({"Status": "Something went wrong"})
+        return JsonResponse({"Status": "Invalid ID"})
 
 
 @csrf_exempt
