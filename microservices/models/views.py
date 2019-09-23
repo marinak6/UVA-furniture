@@ -11,26 +11,31 @@ from django.contrib.auth.models import User
 def createBid(request):
 
     if request.method == 'POST':
-        form_data = request.POST # Postman: request.body -> "form-data"
+        form_data = request.POST  # Postman: request.body -> "form-data"
         try:
             new_bid = Bid(
-                bidder = None,
-                price = 0.0,
-                item_id = None,
-                status = 'PENDING'
+                bidder=None,
+                price=0.0,
+                item_id=None,
+                status='PENDING'
             )
             if form_data and form_data['price']:
-                new_bid.price = float(form_data['price']) # TODO: doesn't convert to float in Postman tests
-            
+                # TODO: doesn't convert to float in Postman tests
+                new_bid.price = float(form_data['price'])
+
             if form_data and form_data['bidder']:
-                if Person.objects.filter(pk=form_data['bidder']).count() == 1: # Person exists
-                    new_bid.bidder = Person.objects.get(pk=int(form_data['bidder']))
+                # Person exists
+                if Person.objects.filter(pk=form_data['bidder']).count() == 1:
+                    new_bid.bidder = Person.objects.get(
+                        pk=int(form_data['bidder']))
 
             if form_data and form_data['item_id']:
-                if Furniture.objects.filter(pk=form_data['item_id']).count() == 1: # Furniture exists
-                    new_bid.item_id = Furniture.objects.get(pk=int(form_data['item_id']))
+                # Furniture exists
+                if Furniture.objects.filter(pk=form_data['item_id']).count() == 1:
+                    new_bid.item_id = Furniture.objects.get(
+                        pk=int(form_data['item_id']))
 
-            new_bid.save() # you must save() before getting
+            new_bid.save()  # you must save() before getting
             database_object = get_object_or_404(Bid, pk=new_bid.pk)
             return JsonResponse(model_to_dict(database_object))
 
@@ -43,20 +48,20 @@ def createBid(request):
 @csrf_exempt
 def bid(request, id):
 
-    if request.method == "POST": # UPDATES Bid data
-        form_data = request.POST # Postman: request.body -> "form-data"
+    if request.method == "POST":  # UPDATES Bid data
+        form_data = request.POST  # Postman: request.body -> "form-data"
         try:
             bid = get_object_or_404(Bid, pk=id)
-            if form_data and form_data['price']: # user can only set price
+            if form_data and form_data['price']:  # user can only set price
                 bid.price = form_data['price']
 
-            bid.save() # you must save() before getting
+            bid.save()  # you must save() before getting
             database_object = get_object_or_404(Bid, pk=bid.pk)
             return JsonResponse(model_to_dict(database_object))
 
         except Exception as error:
             return JsonResponse({"Worked": False, "Error": str(error), "request.POST": str(form_data)})
-    else: # GETS Bid data
+    else:  # GETS Bid data
         try:
             bid = get_object_or_404(Bid, pk=id)
             return JsonResponse(model_to_dict(bid))
@@ -69,7 +74,7 @@ def deleteBid(request, id):
 
     if request.method == "POST":
         try:
-            Bid.objects.get(pk=id).delete() # deletes immedietely
+            Bid.objects.get(pk=id).delete()  # deletes immedietely
             return JsonResponse({"Status": "Bid: " + str(id) + "Deleted"})
 
         except Exception as error:
@@ -81,14 +86,14 @@ def deleteBid(request, id):
 @csrf_exempt
 def updateBid(request, id):
 
-    if request.method == "POST": # UPDATES Bid data
-        form_data = request.POST # Postman: request.body -> "form-data"
+    if request.method == "POST":  # UPDATES Bid data
+        form_data = request.POST  # Postman: request.body -> "form-data"
         try:
             bid = get_object_or_404(Bid, pk=id)
-            if form_data and form_data['price']: # user can only set price
+            if form_data and form_data['price']:  # user can only set price
                 bid.price = form_data['price']
 
-            bid.save() # you must save() before getting
+            bid.save()  # you must save() before getting
             database_object = get_object_or_404(Bid, pk=bid.pk)
             return JsonResponse(model_to_dict(database_object))
 
@@ -194,7 +199,7 @@ def update_furniture(request, id):
                 for item in received_json_data["category"]:
                     category = Category.objects.get(category=item)
                     obj.category.add(category)
-            elif key == "buyer_id":
+            elif key == "buyer":
                 value = Person.objects.get(id=received_json_data[key])
                 setattr(obj, key, value)
             else:
