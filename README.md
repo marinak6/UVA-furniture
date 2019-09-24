@@ -1,4 +1,7 @@
 # UVA-furniture
+
+# Project 2 Checkpoint
+
 ### Furniture Endpoints
 
 - /api/v1/furniture/2 - GET to return info about furniture with id 2
