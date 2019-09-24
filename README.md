@@ -13,8 +13,8 @@
 ![create](/img/Create_furniture.png)
 ![update](/img/Update_furniture.png)
 
-All the fields in the fields for the post endpoint are required, and the only ones.
-All the fields in the fields for the update endpoint are optional, and the only ones.
+All the fields in the image for the post endpoint are required, and the only ones.
+All the fields in the image for the update endpoint are optional, and the only ones.
 
 ### Bid Endpoints
 
@@ -27,5 +27,5 @@ All the fields in the fields for the update endpoint are optional, and the only 
 ![create](/img/Create_bid.png)
 ![update](/img/Update_bid.png)
 
-All the fields in the fields for the post endpoint are required, and the only ones.
-All the fields in the fields for the update endpoint are optional, and the only ones.
+All the fields in the image for the post endpoint are required, and the only ones.
+All the fields in the image for the update endpoint are optional, and the only ones.
