@@ -6,5 +6,6 @@
 - /api/v1/reviews/2/update - Update to update furniture with id 2
 - /api/v1/furniture/2/delete - DELETE to delete furniture with id 2
 
-#### Example on how to use them
+#### Example on how to use create and update
 ![create](/img/Create_furniture.png)
+![update](/img/Update_furniture.png)
