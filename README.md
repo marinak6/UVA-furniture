@@ -15,3 +15,17 @@
 
 All the fields in the fields for the post endpoint are required, and the only ones.
 All the fields in the fields for the update endpoint are optional, and the only ones.
+
+### Bid Endpoints
+
+- /api/v1/bid/5 - GET to return info about bid with id 5
+- /api/v1/bid/create - POST to create a new bid
+- /api/v1/bid/5/update - POST to update bid with id 5
+- /api/v1/bid/5/delete - DELETE to delete bid with id 5
+
+#### Example on how to use create and update
+![create](/img/Create_bid.png)
+![update](/img/Update_bid.png)
+
+All the fields in the fields for the post endpoint are required, and the only ones.
+All the fields in the fields for the update endpoint are optional, and the only ones.
