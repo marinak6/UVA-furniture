@@ -2,7 +2,7 @@
 
 # Project 2 Checkpoint
 
-### Furniture Endpoints
+### Furniture Endpoints Takes in a json request body
 
 - /api/v1/furniture/2 - GET to return info about furniture with id 2
 - /api/v1/furniture/create - POST to create a new furniture
@@ -16,7 +16,7 @@
 All the fields in the image for the post endpoint are required, and the only ones.
 All the fields in the image for the update endpoint are optional, and the only ones.
 
-### Bid Endpoints
+### Bid Endpoints Takes in a form-data
 
 - /api/v1/bid/5 - GET to return info about bid with id 5
 - /api/v1/bid/create - POST to create a new bid
