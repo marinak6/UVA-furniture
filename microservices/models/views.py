@@ -138,7 +138,18 @@ def createFurniture(request):
                 obj.category.add(category)
 
             obj.save()
-            return JsonResponse({"Status": "Sucess"})
+
+            return_dict = {
+                "name": name,
+                "current_bid_id": "",
+                "seller_id": seller_id,
+                "is_bought": False,
+                "category": category_names,
+                "buyer_id": "",
+                "price": price,
+                "description": description
+            }
+            return JsonResponse(return_dict)
         except:
             return JsonResponse({"Status": "Invalid ID"})
     else:
@@ -162,6 +173,7 @@ def furniture(request, id):
             for item in obj_dict["category"]:
                 category.append(item.category)
             return_dict = {
+                "id": id,
                 "name": name,
                 "current_bid_id": current_bid_id,
                 "seller_id": obj_dict["seller"],
@@ -206,7 +218,7 @@ def update_furniture(request, id):
                 value = received_json_data[key]
                 setattr(obj, key, value)
         obj.save()
-        return JsonResponse({"Staus": "Updated"})
+        return JsonResponse({"Status": "Furniture has been updated"})
     except:
         return JsonResponse({"Status": "Invalid ID"})
 
