@@ -11,6 +11,33 @@ services:
       - "8001:8000"
     networks:
       - backend
+      - service_mesh
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py loaddata fixtures/db.json && mod_wsgi-express start-server --working-directory . --reload-on-changes ./microservices/wsgi.py"
+
+  exp:
+    image: tp33/django
+    container_name: exp
+    networks:
+      - service_mesh
+      - public
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./exp:/app
+    command: "mod_wsgi-express start-server --reload-on-changes ./exp/wsgi.py"
+    
+  web:
+    image: tp33/django
+    container_name: web
+    networks:
+      - public
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./web:/app
+    command: "mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
+
 networks:
   backend:
+  service_mesh:
+  public:
