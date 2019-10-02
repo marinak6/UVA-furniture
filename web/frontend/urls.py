@@ -1,8 +1,12 @@
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 app_name = 'frontend'
 urlpatterns = [
+    path('', views.home, name='index'),
     path('admin/', admin.site.urls),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# https://stackoverflow.com/questions/44937812/why-is-django-not-loading-my-css
