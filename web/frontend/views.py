@@ -24,3 +24,7 @@ def home(request):
     # return JsonResponse(resp)
     # return render(request, 'home.html')
     return JsonResponse(resp)
+
+
+def item_details(request):
+    return render(request, 'item_details.html')
