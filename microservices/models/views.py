@@ -5,6 +5,9 @@ from .models import Bid, Furniture, Person, Category
 from django.forms.models import model_to_dict
 import json
 from django.contrib.auth.models import User
+import urllib.request
+import urllib.parse
+import json
 
 
 @csrf_exempt
@@ -231,3 +234,19 @@ def delete_furniture(request, id):
         return JsonResponse({"Status": "Deleted"})
     except:
         return JsonResponse({"Status": "Furniture with that ID does not exist"})
+
+
+def newest_items(request):
+
+    furnitures = Furniture.objects.order_by('-timestamp')[:3]
+    res = []
+    for furniture in furnitures:
+
+        req = urllib.request.Request(
+            'http://microservices:8000/api/v1/furniture/'+str(furniture.pk))
+
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        res.append(resp)
+
+    return JsonResponse({"Res": res})
