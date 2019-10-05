@@ -67,4 +67,16 @@
   margin-top: 20px;
 }
 
+/* Invalid page */
+#invalid {
+  background: #333 url("../img/invalid.jpg") no-repeat center center/cover;
+  height: 100vh;
+  color: #fff;
+}
+
+#invalid-heading{
+  color: #3a3633;
+  text-align: center;
+  padding: 35px;
+}
 /* Newest items */
