@@ -48,24 +48,23 @@
   color: black;
   margin: 0 auto;
   float: none;
-  margin-right: 50%;
-  margin-top: 10%;
-  width: 25%;
-}
-
-#item-card {
-  color: black;
-  margin: 0 auto;
-  float: none;
   margin-right: 45%;
   margin-top: 10%;
   width: 30%;
+  padding-bottom: 25px;
+  padding-right: 10px;
+  padding-left: 10px;
   border: 2px solid #3a3633;
   border-radius: 10px;
 }
 
 #item-card-title{
   text-align: center;
+  margin: 10px;
+}
+
+#item-card-body{
+  margin-top: 20px;
 }
 
 /* Newest items */
