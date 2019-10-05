@@ -1,18 +1,30 @@
 {% extends 'base.html' %} {% block content %}
 
-<!-- Showcase -->
-<header id="showcase-details">
-  <div class="showcase-content">
-    <div class="text">
-      <h1 class="l1-heading">
-        UVA Furniture
-      </h1>
-      <p class="lead">
-        {{item.name}}
-      </p>
-    </div>
-  </div>
-</header>
+<body id="item-details">
+    <div class="showcase-content">
 
-<!-- Newest Items -->
+        <div class = "card" id = "item-card">
+            <div class="card-body">
+                <h5 class="card-title" id = "item-card-title"> {{item.name}}</h5>
+                <div class="card-text">
+                    <ul class="list-group">
+                        <li class="list-group-item">Description: {{item.description}}</li>
+                        <li class="list-group-item">Price: ${{item.price}}</li>
+                        <li class="list-group-item">Category: <p style="display:inline">
+                                {% for c in item.category %}
+                                    {% if forloop.last %}
+                                        {{c}} 
+                                    {% else %}
+                                        {{c}}, 
+                                    {% endif %}
+                                {% endfor %}
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
 {% endblock %}

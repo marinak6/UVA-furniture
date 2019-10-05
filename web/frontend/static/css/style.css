@@ -5,12 +5,6 @@
   color: #fff;
 }
 
-#showcase-details {
-  background: #333 url("../img/details.jpg") no-repeat center center/cover;
-  height: 100vh;
-  color: #fff;
-}
-
 .lead {
   font-size: 1.3rem;
   margin-bottom: 1rem;
@@ -41,6 +35,37 @@
   font-size: 3rem;
   margin-bottom: 0.75rem;
   line-height: 1.1;
+}
+
+/* Item detail page */
+#item-details {
+  background: #333 url("../img/details.jpg") no-repeat center center/cover;
+  height: 100vh;
+  color: #fff;
+}
+
+#item-card {
+  color: black;
+  margin: 0 auto;
+  float: none;
+  margin-right: 50%;
+  margin-top: 10%;
+  width: 25%;
+}
+
+#item-card {
+  color: black;
+  margin: 0 auto;
+  float: none;
+  margin-right: 45%;
+  margin-top: 10%;
+  width: 30%;
+  border: 2px solid #3a3633;
+  border-radius: 10px;
+}
+
+#item-card-title{
+  text-align: center;
 }
 
 /* Newest items */

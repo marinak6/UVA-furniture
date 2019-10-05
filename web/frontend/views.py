@@ -27,7 +27,12 @@ def home(request):
 
 
 def item_details(request, item_id):
+    # get item
     req = urllib.request.Request('http://exp:8000/api/v1/item/'+str(item_id))
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-    resp = json.loads(resp_json)
-    return render(request, 'item_details.html', {'item': resp})
+    item = json.loads(resp_json)
+
+    context = {
+        'item': item
+    }
+    return render(request, 'item_details.html', context)
