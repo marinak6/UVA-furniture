@@ -19,3 +19,13 @@ def home(request):
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
     return JsonResponse(resp)
+
+
+@csrf_exempt
+def item(request, item_id):
+    req = urllib.request.Request(
+        'http://microservices:8000/api/v1/furniture/'+str(item_id))
+
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    return JsonResponse(resp)
