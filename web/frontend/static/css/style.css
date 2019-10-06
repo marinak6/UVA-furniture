@@ -58,12 +58,12 @@
   border-radius: 10px;
 }
 
-#item-card-title{
+#item-card-title {
   text-align: center;
   margin: 10px;
 }
 
-#item-card-body{
+#item-card-body {
   margin-top: 20px;
 }
 
@@ -74,7 +74,7 @@
   color: #fff;
 }
 
-#invalid-heading{
+#invalid-heading {
   color: #3a3633;
   text-align: center;
   padding: 35px;
