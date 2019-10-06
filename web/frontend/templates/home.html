@@ -16,24 +16,27 @@
 
 <div class="items">
   <div class="item">
-    <img src="../static/img/stock.jpeg" alt="Stock" />
-
+    <a href="{% url 'frontend:item_details' resp.0.id %}">
+      <img src="../static/img/stock.jpeg" alt="Stock" />
+    </a>
     <h3>{{ resp.0.name }}</h3>
     <p>
       {{ resp.0.description }}
     </p>
   </div>
   <div class="item">
-    <img src="../static/img/stock.jpeg" alt="Stock" />
-
+    <a href="{% url 'frontend:item_details' resp.1.id %}">
+      <img src="../static/img/stock.jpeg" alt="Stock" />
+    </a>
     <h3>{{ resp.1.name }}</h3>
     <p>
       {{ resp.1.description }}
     </p>
   </div>
   <div class="item">
-    <img src="../static/img/stock.jpeg" alt="Stock" />
-
+    <a href="{% url 'frontend:item_details' resp.1.id %}">
+      <img src="../static/img/stock.jpeg" alt="Stock" />
+    </a>
     <h3>{{ resp.2.name }}</h3>
     <p>
       {{ resp.2.description }}
