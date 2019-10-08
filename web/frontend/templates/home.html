@@ -13,36 +13,39 @@
     </div>
   </div>
 </header>
+<section class="newest_items">
+  <h3>Newest Furnitures</h3>
 
-<div class="items">
-  <div class="item">
-    <a href="{% url 'frontend:item_details' resp.0.id %}">
-      <img src="../static/img/stock.jpeg" alt="Stock" />
-    </a>
-    <h3>{{ resp.0.name }}</h3>
-    <p>
-      {{ resp.0.description }}
-    </p>
+  <div class="items">
+    <div class="item">
+      <a href="{% url 'frontend:item_details' resp.0.id %}">
+        <img src="../static/img/stock.jpeg" alt="Stock" />
+      </a>
+      <h3>{{ resp.0.name }}</h3>
+      <p>
+        {{ resp.0.description }}
+      </p>
+    </div>
+    <div class="item">
+      <a href="{% url 'frontend:item_details' resp.1.id %}">
+        <img src="../static/img/stock.jpeg" alt="Stock" />
+      </a>
+      <h3>{{ resp.1.name }}</h3>
+      <p>
+        {{ resp.1.description }}
+      </p>
+    </div>
+    <div class="item">
+      <a href="{% url 'frontend:item_details' resp.1.id %}">
+        <img src="../static/img/stock.jpeg" alt="Stock" />
+      </a>
+      <h3>{{ resp.2.name }}</h3>
+      <p>
+        {{ resp.2.description }}
+      </p>
+    </div>
   </div>
-  <div class="item">
-    <a href="{% url 'frontend:item_details' resp.1.id %}">
-      <img src="../static/img/stock.jpeg" alt="Stock" />
-    </a>
-    <h3>{{ resp.1.name }}</h3>
-    <p>
-      {{ resp.1.description }}
-    </p>
-  </div>
-  <div class="item">
-    <a href="{% url 'frontend:item_details' resp.1.id %}">
-      <img src="../static/img/stock.jpeg" alt="Stock" />
-    </a>
-    <h3>{{ resp.2.name }}</h3>
-    <p>
-      {{ resp.2.description }}
-    </p>
-  </div>
-</div>
+</section>
 
 <!-- Newest Items -->
 {% endblock %}
