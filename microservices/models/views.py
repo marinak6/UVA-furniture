@@ -111,7 +111,10 @@ def createFurniture(request):
 
     if request.method == "POST":
         try:
-            received_json_data = json.loads(request.body.decode("utf-8"))
+            try:
+                received_json_data = json.loads(request.body.decode("utf-8"))
+            except:
+                received_json_data = request.POST
             name = received_json_data["name"]
             seller_id = received_json_data['seller']
             is_bought = received_json_data['is_bought']
@@ -126,7 +129,7 @@ def createFurniture(request):
                 return JsonResponse({"Status": "is_bought is Invalid"})
 
             if type(category_names) != list:
-                return JsonResponse({"Status": "Category needs to be in a list"})
+                category_names = [category_names]
             obj = Furniture.objects.create(
                 name=name,
                 current_bid_id=None,
@@ -153,8 +156,8 @@ def createFurniture(request):
                 "description": description
             }
             return JsonResponse(return_dict)
-        except:
-            return JsonResponse({"Status": "Invalid ID"})
+        except Exception as ex:
+            return JsonResponse({"Status": str(ex)})
     else:
         return JsonResponse({"Status": "Something went wrong"})
 
