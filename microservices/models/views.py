@@ -5,6 +5,9 @@ from .models import Bid, Furniture, Person, Category
 from django.forms.models import model_to_dict
 import json
 from django.contrib.auth.models import User
+import urllib.request
+import urllib.parse
+import json
 
 
 @csrf_exempt
@@ -108,7 +111,10 @@ def createFurniture(request):
 
     if request.method == "POST":
         try:
-            received_json_data = json.loads(request.body.decode("utf-8"))
+            try:
+                received_json_data = json.loads(request.body.decode("utf-8"))
+            except:
+                received_json_data = request.POST
             name = received_json_data["name"]
             seller_id = received_json_data['seller']
             is_bought = received_json_data['is_bought']
@@ -123,7 +129,7 @@ def createFurniture(request):
                 return JsonResponse({"Status": "is_bought is Invalid"})
 
             if type(category_names) != list:
-                return JsonResponse({"Status": "Category needs to be in a list"})
+                category_names = [category_names]
             obj = Furniture.objects.create(
                 name=name,
                 current_bid_id=None,
@@ -150,8 +156,8 @@ def createFurniture(request):
                 "description": description
             }
             return JsonResponse(return_dict)
-        except:
-            return JsonResponse({"Status": "Invalid ID"})
+        except Exception as ex:
+            return JsonResponse({"Status": str(ex)})
     else:
         return JsonResponse({"Status": "Something went wrong"})
 
@@ -231,3 +237,19 @@ def delete_furniture(request, id):
         return JsonResponse({"Status": "Deleted"})
     except:
         return JsonResponse({"Status": "Furniture with that ID does not exist"})
+
+
+def newest_items(request):
+
+    furnitures = Furniture.objects.order_by('-timestamp')[:3]
+    res = []
+    for furniture in furnitures:
+
+        req = urllib.request.Request(
+            'http://microservices:8000/api/v1/furniture/'+str(furniture.pk))
+
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        res.append(resp)
+
+    return JsonResponse({"Res": res})
