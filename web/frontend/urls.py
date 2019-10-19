@@ -8,6 +8,7 @@ app_name = 'frontend'
 urlpatterns = [
     path('', views.home, name='index'),
     path('item/<int:item_id>', views.item_details, name="item_details"),
+    path('login', views.login, name='login'),
     path('admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 # https://stackoverflow.com/questions/44937812/why-is-django-not-loading-my-css

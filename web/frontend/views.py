@@ -31,3 +31,8 @@ def item_details(request, item_id):
     if("Status" in context['item']):
         return render(request, 'invalid_access.html')
     return render(request, 'item_details.html', context)
+
+
+def login(request):
+    # add logic for logging in
+    return render(request, 'login.html')
