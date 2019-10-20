@@ -6,8 +6,15 @@
   {% csrf_token %}
 
   <div class="form-group">
-    {{ form.as_ul }}
-  </div>
+    {% for field in form %}
+        <div class="form-group">
+            {{field.label_tag}}
+            {{field}}
+            {% if field.help_text %}
+                <small class="form-text text-muted">{{ field.help_text }}</small>
+            {% endif %}
+        </div>
+    {% endfor%}
   <button type="submit" name="submit" value="Register">
     Register
   </button>
