@@ -6,8 +6,10 @@ from django.http import JsonResponse
 
 # Create your views here.
 
-from django.shortcuts import (get_object_or_404, redirect, render,
-                              render_to_response)
+from django.shortcuts import (
+    get_object_or_404, redirect, render, render_to_response)
+
+from .forms import CreateListingForm
 
 
 def home(request):
@@ -34,5 +36,31 @@ def item_details(request, item_id):
 
 
 def login(request):
-    # add logic for logging in
+    # if(request.method == "POST"):
+    #    received_login_data = request.POST
+    #    login_info = {
+    #        "username": received_login_data['username'],
+    #        "password": received_login_data['password']
+    #    }
+        # call login experience service that would check username/password
+
+    #    return JsonResponse(login_info)
+    # else:
     return render(request, 'login.html')
+
+
+def create_listing(request):
+    if request.method == "POST":
+        received_json_data = request.POST
+        listing = {
+            "name": received_json_data["name"],
+            "category_names": received_json_data['categories'].split(","),
+            "description": received_json_data["description"],
+            "price": received_json_data["price"]
+        }
+        return JsonResponse(listing)
+    else:
+        form = CreateListingForm()
+        args = {'form': form}
+        # need to change to auth_render
+        return render(request, "create_listing.html", args)

@@ -10,5 +10,7 @@ urlpatterns = [
     path('item/<int:item_id>', views.item_details, name="item_details"),
     path('login', views.login, name='login'),
     path('admin/', admin.site.urls),
+    path('create_listing/', views.create_listing, name="create_listing"),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 # https://stackoverflow.com/questions/44937812/why-is-django-not-loading-my-css
