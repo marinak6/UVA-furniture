@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.shortcuts import (get_object_or_404, redirect, render,
                               render_to_response)
 
-from .forms import CreateListingForm
+from .forms import (CreateListingForm, CreateRegisterForm)
 
 
 def home(request):
@@ -50,3 +50,21 @@ def create_listing(request):
         args = {'form': form}
         # need to change to auth_render
         return render(request, "create_listing.html", args)
+
+
+def register(request):
+    if request.method == 'POST':
+        register_data = request.POST
+        register_info = {
+            "first_name": register_data["first_name"],
+            "last_name": register_data["last_name"],
+            "email": register_data["email"],
+            "password": register_data["password"],
+        }
+        # authenticate user
+
+        return JsonResponse(register_info)  # need to remove later
+    else:
+        form = CreateRegisterForm()
+        args = {'form': form}
+        return render(request, "register.html", args)
