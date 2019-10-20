@@ -45,7 +45,7 @@
 }
 
 #item-card {
-  color: black;
+  color: white;
   margin: 0 auto;
   float: none;
   margin-right: 45%;
@@ -56,11 +56,17 @@
   padding-left: 10px;
   border: 2px solid #3a3633;
   border-radius: 10px;
+  background: rgba(0, 0, 0, 0.16);
 }
-
 #item-card-title {
   text-align: center;
   margin: 10px;
+}
+
+#item-list-group{
+    background: rgba(0, 0, 0, 0.0);
+    color: white;
+    
 }
 
 #item-card-body {
@@ -95,4 +101,10 @@
 
 .newest_items {
   text-align: center;
+}
+
+/* Login page */
+.login-form {
+  display: flex;
+  justify-content: center;
 }

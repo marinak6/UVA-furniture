@@ -36,17 +36,16 @@ def item_details(request, item_id):
 
 
 def login(request):
-    # if(request.method == "POST"):
-    #    received_login_data = request.POST
-    #    login_info = {
-    #        "username": received_login_data['username'],
-    #        "password": received_login_data['password']
-    #    }
-        # call login experience service that would check username/password
-
-    #    return JsonResponse(login_info)
-    # else:
-    return render(request, 'login.html')
+    if(request.method == "POST"):
+        received_login_data = request.POST
+        login_info = {
+            "email": received_login_data['email'],
+            "password": received_login_data['password']
+        }
+    # call login experience service that would check username/password
+        return JsonResponse(login_info)
+    else:
+        return render(request, 'login.html')
 
 
 def create_listing(request):
