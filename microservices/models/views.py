@@ -229,8 +229,8 @@ def update_furniture(request, id):
                 setattr(obj, key, value)
         obj.save()
         return JsonResponse({"Status": "Furniture has been updated"})
-    except:
-        return JsonResponse({"Status": "Invalid ID"})
+    except Exception as ex:
+        return JsonResponse({"Status": str(ex)})
 
 
 @csrf_exempt

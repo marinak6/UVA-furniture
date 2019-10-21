@@ -46,9 +46,10 @@ def create_listing(request):
         form_data["seller"] = "1"
 
         url = 'http://exp:8000/api/v1/furniture/create'
-        post_encoded = urllib.parse.urlencode(form_data).encode('utf-8')
-        req2 = urllib.request.Request(url, data=post_encoded, method='POST')
-        resp_json = urllib.request.urlopen(req2).read().decode('utf-8')
+        encode_form = urllib.parse.urlencode(form_data).encode('utf-8')
+        new_request = urllib.request.Request(
+            url, data=encode_form, method='POST')
+        resp_json = urllib.request.urlopen(new_request).read().decode('utf-8')
         resp = json.loads(resp_json)
         new_furniture_id = resp["id"]
 
