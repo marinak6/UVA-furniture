@@ -17,3 +17,4 @@ class CreateRegisterForm(forms.Form):
     last_name = forms.CharField(
         max_length=30, required=False, help_text='Optional.')
     password = forms.CharField(widget=forms.PasswordInput)
+    email = forms.EmailField(label='Email', max_length=100)

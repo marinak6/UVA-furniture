@@ -11,6 +11,10 @@
             <button type="submit" class="btn btn-primary" name="submit" value="Login" style="margin-top:10%">
                 Login
             </button>
+            <br>
+            {% if error %}
+              {{error}}
+            {% endif %}
         </div>
     </div>
 </form>

@@ -43,8 +43,21 @@ def login(request):
             "email": received_login_data['email'],
             "password": received_login_data['password']
         }
-    # call login experience service that would check username/password
-        return JsonResponse(login_info)
+        try:
+            exp_service_url = 'http://exp:8000/api/v1/login'
+            encoded_login_data = urllib.parse.urlencode(received_login_data).encode('utf-8')
+            request2 = urllib.request.Request(exp_service_url, data=encoded_login_data, method='POST')
+            json_respsonse = urllib.request.urlopen(request2).read().decode('utf-8')
+            response = json.loads(json_respsonse)
+            
+            # we can now log them in
+            authenticator = response['authenticator']
+            response = HttpResponseRedirect(reverse('frontend:index'))
+            response.set_cookie('authenticator', authenticator)
+            return response
+        except Exception as error:
+            args = {'error': str(error)}
+            return render(request, "login.html", args)
     else:
         return render(request, 'login.html')
 
@@ -69,11 +82,6 @@ def create_listing(request):
 def register(request):
     if request.method == 'POST':
         register_data = request.POST
-        register_info = {
-            "first_name": register_data["first_name"],
-            "last_name": register_data["last_name"],
-            "password": register_data["password"],
-        }
         try:
             exp_service_url = 'http://exp:8000/api/v1/register'
             encoded_register_data = urllib.parse.urlencode(register_data).encode('utf-8')

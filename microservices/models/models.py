@@ -9,6 +9,7 @@ class Person(models.Model):
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     password = models.TextField(null=True) # default value, but still form required
+    email = models.CharField(max_length=100, null=True)
 
 
 class Authenticator(models.Model):

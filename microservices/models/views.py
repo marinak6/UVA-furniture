@@ -8,6 +8,7 @@ import urllib.request
 import urllib.parse
 
 # Authentication
+from django.contrib.auth.hashers import make_password, check_password
 from django.conf import settings
 import os
 import hmac
@@ -16,14 +17,15 @@ import hmac
 @csrf_exempt
 def check_login(request):
     if request.method == 'POST':
-        form_data = request.POST 
+        form_data = request.POST
+        
         try:
             email = form_data['email']
             password = form_data['password']
-            person = Person.objects.filter(email=email)
-            if len(person) == 1:
-                if check_password(password, person[0].password):
-                    auth = Authenticator.objects.get(person_id=person[0]).authenticator
+            if Person.objects.filter(email=email).count() == 1:
+                person = Person.objects.get(email=email)
+                if check_password(password, person.password):
+                    auth = Authenticator.objects.get(person_id=person).authenticator
                     return JsonResponse({'authenticator': auth})
                 else:
                     return JsonResponse({'error': 'password is wrong'})
@@ -31,7 +33,6 @@ def check_login(request):
                 return JsonResponse({'error': 'email is wrong'})
         except Exception as error:
             return JsonResponse({"Microservices Login Error Message": str(error)})
-
 
 @csrf_exempt
 def create_person(request):
@@ -41,10 +42,17 @@ def create_person(request):
             first_name = form_data['first_name']
             last_name = form_data['last_name']
             password = form_data['password']
+            email = form_data['email']
+            
+            # make sure email isn't already used
+            if Person.objects.filter(email=email).count() == 1:
+                raise Exception("Email already taken.")
+            
             person = Person.objects.create(
                 first_name=first_name,
                 last_name=last_name,
-                password=password,
+                password=make_password(password), # hashes the password
+                email=email,
             )
             person.save()
             

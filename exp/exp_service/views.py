@@ -19,7 +19,7 @@ def login(request):
             request2 = urllib.request.Request(microservices_url, data=encoded_form_data, method='POST')
             json_respsonse = urllib.request.urlopen(request2).read().decode('utf-8')
             response = json.loads(json_respsonse) # redundant?
-            return HttpResponse(json.dumps(response))
+            return JsonResponse(response)
             
         except Exception as error:
             return JsonResponse({"Experience Service Register Error Message": str(error)})
