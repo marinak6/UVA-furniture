@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 
 # Create your tests here.
-from .models import Furniture, Person, Category
+from .models import Furniture, Person, Category, Authenticator
 import json
 from django.http import JsonResponse
 
@@ -110,3 +110,12 @@ class CreateBid(TestCase):
         print(res_message)
 
         self.assertEqual(res_message["status"], 'PENDING')
+
+
+class CreateAuth(TestCase):
+    def setUp(self):
+        self.c = Client()
+        p = Person(first_name="Bryan", last_name="Tran")
+        p.save()
+
+    def create_auth:

@@ -15,5 +15,7 @@ urlpatterns = [
     # Authentication
     path('register', csrf_exempt(views.register), name='register'),
     path('login', csrf_exempt(views.login), name='login'),
+    path('login/', csrf_exempt(views.login), name='login'),
+
     path('logout/', csrf_exempt(views.logout), name='logout'),
 ]

@@ -12,7 +12,7 @@ urlpatterns = [
     path('create_listing/', views.create_listing, name="create_listing"),
 
     # Authentication
-    path('register/', views.register, name='register'),
+    path('register', views.register, name='register'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
 

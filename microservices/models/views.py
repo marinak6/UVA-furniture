@@ -25,9 +25,19 @@ def check_login(request):
             if Person.objects.filter(email=email).count() == 1:
                 person = Person.objects.get(email=email)
                 if check_password(password, person.password):
-                    auth = Authenticator.objects.get(
-                        person_id=person).authenticator
-                    return JsonResponse({'authenticator': auth})
+                    authenticator = hmac.new(
+                        key=settings.SECRET_KEY.encode('utf-8'),
+                        msg=os.urandom(32),
+                        digestmod='sha256',
+                    ).hexdigest()
+
+                    my_auth = Authenticator.objects.create(
+                        person_id=person,
+                        authenticator=authenticator,
+                    )
+                    my_auth.save()
+
+                    return JsonResponse({'authenticator': my_auth.authenticator})
                 else:
                     return JsonResponse({'error': 'password is wrong'})
             else:
@@ -186,12 +196,17 @@ def createFurniture(request):
             except:
                 received_json_data = request.POST
             name = received_json_data["name"]
-            if "seller_id" in received_json_data:
+            if "seller" in received_json_data:
                 seller_id = received_json_data['seller']
-            else:
-                auth_obj = Authenticator.objects.get(
-                    authenticator=received_json_data["auth"])
+            elif "auth" in received_json_data:
+                try:
+                    auth_obj = Authenticator.objects.get(
+                        authenticator=received_json_data["auth"])
+                except:
+                    return JsonResponse({"Status": "Invalid Cookie"})
                 seller_id = auth_obj.person_id.id
+            else:
+                raise Exception("Need a seller or auth")
             category_names = received_json_data['category'].split(",")
             description = received_json_data["description"]
             price = received_json_data["price"]

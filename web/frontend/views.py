@@ -124,6 +124,8 @@ def create_listing(request):
             url, data=encode_form, method='POST')
         resp_json = urllib.request.urlopen(new_request).read().decode('utf-8')
         resp = json.loads(resp_json)
+        if "Status" in resp:
+            return HttpResponseRedirect(reverse("frontend:login") + "?next=" + reverse("frontend:create_listing"))
         new_furniture_id = resp["id"]
 
         return redirect('/item/'+str(new_furniture_id))
