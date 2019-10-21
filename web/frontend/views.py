@@ -150,6 +150,9 @@ def register(request):
             json_respsonse = urllib.request.urlopen(
                 request2).read().decode('utf-8')
             response = json.loads(json_respsonse)
+            if "Microservices Register Error Message" in response:
+                raise Exception(
+                    response["Microservices Register Error Message"])
             return HttpResponseRedirect('login')
         except Exception as error:
             form = CreateRegisterForm()
