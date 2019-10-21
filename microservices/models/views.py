@@ -318,6 +318,7 @@ def delete_furniture(request, id):
         return JsonResponse({"Status": "Furniture with that ID does not exist"})
 
 
+@csrf_exempt
 def newest_items(request):
 
     furnitures = Furniture.objects.order_by('-timestamp')[:3]
@@ -332,3 +333,16 @@ def newest_items(request):
         res.append(resp)
 
     return JsonResponse({"Res": res})
+
+
+@csrf_exempt
+def logout(request):
+    received_json_data = request.POST
+    try:
+        auth_obj = Authenticator.objects.get(
+            authenticator=received_json_data["authenticator"])
+        auth_obj.delete()
+    except Exception as ex:
+        return JsonResponse({"Status": str(ex)})
+
+    return JsonResponse({"Status": "Deleted"})

@@ -81,12 +81,26 @@ def login(request):
         if request.GET.get('next'):
             next_link = request.GET.get('next')
         else:
-            next_link = reverse(home)
+            next_link = reverse("frontend:index")
         return render(request, 'login.html', {"next_link": next_link})
 
 
 def logout(request):
     response = HttpResponseRedirect(reverse('frontend:index'))
+    authenticator = request.COOKIES.get('authenticator')
+    if authenticator:
+        try:
+            url = 'http://exp:8000/api/v1/logout/'
+            form_data = {"authenticator": authenticator}
+            encode_form = urllib.parse.urlencode(form_data).encode('utf-8')
+            new_request = urllib.request.Request(
+                url, data=encode_form, method='POST')
+            resp_json = urllib.request.urlopen(
+                new_request).read().decode('utf-8')
+        except Exception as ex:
+            return JsonResponse({"Status": str(ex)})
+        # resp = json.loads(resp_json)
+
     response.delete_cookie('authenticator')
     return response
 
