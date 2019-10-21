@@ -1,14 +1,81 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Bid, Furniture, Person, Category
+from .models import Bid, Furniture, Person, Category, Authenticator
 from django.forms.models import model_to_dict
 import json
-from django.contrib.auth.models import User
 import urllib.request
 import urllib.parse
-import json
 
+# Authentication
+from django.contrib.auth.hashers import make_password, check_password
+from django.conf import settings
+import os
+import hmac
+
+
+@csrf_exempt
+def check_login(request):
+    if request.method == 'POST':
+        form_data = request.POST
+        
+        try:
+            email = form_data['email']
+            password = form_data['password']
+            if Person.objects.filter(email=email).count() == 1:
+                person = Person.objects.get(email=email)
+                if check_password(password, person.password):
+                    auth = Authenticator.objects.get(person_id=person).authenticator
+                    return JsonResponse({'authenticator': auth})
+                else:
+                    return JsonResponse({'error': 'password is wrong'})
+            else:
+                return JsonResponse({'error': 'email is wrong'})
+        except Exception as error:
+            return JsonResponse({"Microservices Login Error Message": str(error)})
+
+@csrf_exempt
+def create_person(request):
+    if request.method == 'POST':
+        form_data = request.POST 
+        try:
+            first_name = form_data['first_name']
+            last_name = form_data['last_name']
+            password = form_data['password']
+            email = form_data['email']
+            
+            # make sure email isn't already used
+            if Person.objects.filter(email=email).count() == 1:
+                raise Exception("Email already taken.")
+            
+            person = Person.objects.create(
+                first_name=first_name,
+                last_name=last_name,
+                password=make_password(password), # hashes the password
+                email=email,
+            )
+            person.save()
+            
+            # generate authenticator token
+            authenticator = hmac.new(
+                key = settings.SECRET_KEY.encode('utf-8'),
+                msg = os.urandom(32),
+                digestmod = 'sha256',
+            ).hexdigest()
+            
+            # save token in Authenticator model
+            my_auth = Authenticator.objects.create(
+                person_id=person,
+                authenticator=authenticator,
+            )
+            my_auth.save()
+            
+            # return person object 
+            person_dict = model_to_dict(person)
+            person_dict.pop('password')
+            return JsonResponse(person_dict)
+        except Exception as error:
+            return JsonResponse({"Microservices Register Error Message": str(error)})
 
 @csrf_exempt
 def createBid(request):

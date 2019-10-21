@@ -9,6 +9,37 @@ import json
 from django.http import JsonResponse
 # Create your views here.
 
+@csrf_exempt
+def login(request):
+    if request.method == 'POST':
+        form_data = request.POST
+        try:
+            microservices_url = 'http://microservices:8000/api/v1/login'
+            encoded_form_data = urllib.parse.urlencode(form_data).encode('utf-8')
+            request2 = urllib.request.Request(microservices_url, data=encoded_form_data, method='POST')
+            json_respsonse = urllib.request.urlopen(request2).read().decode('utf-8')
+            response = json.loads(json_respsonse) # redundant?
+            return JsonResponse(response)
+            
+        except Exception as error:
+            return JsonResponse({"Experience Service Register Error Message": str(error)})
+
+
+@csrf_exempt
+def register(request):
+    if request.method == 'POST':
+        form_data = request.POST
+        try:
+            microservices_url = 'http://microservices:8000/api/v1/person/create'
+            encoded_form_data = urllib.parse.urlencode(form_data).encode('utf-8')
+            request2 = urllib.request.Request(microservices_url, data=encoded_form_data, method='POST')
+            json_respsonse = urllib.request.urlopen(request2).read().decode('utf-8')
+            response = json.loads(json_respsonse) # redundant?
+            return HttpResponse(json.dumps(response))
+            
+        except Exception as error:
+            return JsonResponse({"Experience Service Register Error Message": str(error)})
+
 
 @csrf_exempt
 def home(request):
