@@ -6,6 +6,11 @@ from datetime import datetime
 
 # Create your models here.
 
+class Authenticator(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    authenticator = models.CharField(max_length=64, primary_key=True)
+    date_created = models.DateField(auto_now=True)
+    
 
 class Person(models.Model):
     first_name = CharField(max_length=200)
