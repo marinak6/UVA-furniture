@@ -9,4 +9,7 @@ urlpatterns = [
     path('', csrf_exempt(views.home), name='home'),
     path('item/<int:item_id>', csrf_exempt(views.item), name='item'),
     path('admin/', admin.site.urls),
+    
+    # Authentication
+    path('person/create', csrf_exempt(views.register), name='register')
 ]
