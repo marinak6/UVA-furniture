@@ -17,9 +17,7 @@ def home(request):
     req = urllib.request.Request('http://exp:8000/api/v1/')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
-    # return JsonResponse(resp)
     return render(request, 'home.html', {'resp': resp["Res"]})
-    # return render(request, 'home.html')
 
 
 def item_details(request, item_id):
@@ -60,6 +58,12 @@ def login(request):
             return render(request, "login.html", args)
     else:
         return render(request, 'login.html')
+        
+
+def logout(request):
+    response = HttpResponseRedirect(reverse('frontend:index'))
+    response.delete_cookie('authenticator')
+    return response
 
 
 def create_listing(request):
