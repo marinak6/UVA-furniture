@@ -1,15 +1,50 @@
 {% extends 'base.html' %} {% block content %}
+{% load static %}
 
-<h1>Create new Listing</h1>
+<link rel="stylesheet" href="{% static 'css/create_listing.css' %}" />
 
-<form method="post">
-  {% csrf_token %}
 
-  <div class="form-group">
-    {{ form.as_ul }}
+
+
+
+<div class="container">
+  <div class="col-md-6 mx-auto text-center">
+    <div class="header-title">
+      <h1 class="wv-heading--title">
+        Create new Listing
+      </h1>
+      <h2 class="wv-heading--subtitle">
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magnam, optio!
+      </h2>
+    </div>
   </div>
-  <button type="submit" name="submit" value="Create Listing">
-    Create Listing
-  </button>
-</form>
+  <div class="row">
+    <div class="col-md-4 mx-auto">
+      <div class="myform form ">
+        <form action="" method="post">
+            {% csrf_token %}
+
+            {% if form.subject.errors %}
+            <ol role="alertdialog">
+              {% for error in form.subject.errors %}
+              <li role="alert"><strong>{{ error|escape }}</strong></li>
+              {% endfor %}
+            </ol>
+            {% endif %}
+            
+            {% for field in form %}
+            <div class="fieldWrapper form-group" aria-required={% if field.field.required %}"true"{% else %}"false"{% endif %}>
+              {{ field.label_tag }}{% if field.field.required %}<span class="required">*</span>{% endif %}
+              {{ field }}
+              {% if field.help_text %}
+              <p class="help">{{ field.help_text|safe }}</p>
+              {% endif %}
+            </div>
+            {% endfor %}
+            <input type="submit" class="btn btn-primary mb-2" value="Submit" />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

@@ -137,9 +137,15 @@ def createFurniture(request):
                 price=price,
             )
             for category_name in category_names:
-                category = Category.objects.get(category=category_name)
-                obj.category.add(category)
-
+                try:
+                    category = Category.objects.get(
+                        category=category_name.lower())
+                    obj.category.add(category)
+                except:
+                    new_category = Category.objects.create(
+                        category=category_name.lower())
+                    new_category.save()
+                    obj.category.add(new_category)
             obj.save()
 
             return_dict = {
