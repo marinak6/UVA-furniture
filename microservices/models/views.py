@@ -18,14 +18,15 @@ import hmac
 def check_login(request):
     if request.method == 'POST':
         form_data = request.POST
-        
+
         try:
             email = form_data['email']
             password = form_data['password']
             if Person.objects.filter(email=email).count() == 1:
                 person = Person.objects.get(email=email)
                 if check_password(password, person.password):
-                    auth = Authenticator.objects.get(person_id=person).authenticator
+                    auth = Authenticator.objects.get(
+                        person_id=person).authenticator
                     return JsonResponse({'authenticator': auth})
                 else:
                     return JsonResponse({'error': 'password is wrong'})
@@ -34,48 +35,50 @@ def check_login(request):
         except Exception as error:
             return JsonResponse({"Microservices Login Error Message": str(error)})
 
+
 @csrf_exempt
 def create_person(request):
     if request.method == 'POST':
-        form_data = request.POST 
+        form_data = request.POST
         try:
             first_name = form_data['first_name']
             last_name = form_data['last_name']
             password = form_data['password']
             email = form_data['email']
-            
+
             # make sure email isn't already used
             if Person.objects.filter(email=email).count() == 1:
                 raise Exception("Email already taken.")
-            
+
             person = Person.objects.create(
                 first_name=first_name,
                 last_name=last_name,
-                password=make_password(password), # hashes the password
+                password=make_password(password),  # hashes the password
                 email=email,
             )
             person.save()
-            
+
             # generate authenticator token
             authenticator = hmac.new(
-                key = settings.SECRET_KEY.encode('utf-8'),
-                msg = os.urandom(32),
-                digestmod = 'sha256',
+                key=settings.SECRET_KEY.encode('utf-8'),
+                msg=os.urandom(32),
+                digestmod='sha256',
             ).hexdigest()
-            
+
             # save token in Authenticator model
             my_auth = Authenticator.objects.create(
                 person_id=person,
                 authenticator=authenticator,
             )
             my_auth.save()
-            
-            # return person object 
+
+            # return person object
             person_dict = model_to_dict(person)
             person_dict.pop('password')
             return JsonResponse(person_dict)
         except Exception as error:
             return JsonResponse({"Microservices Register Error Message": str(error)})
+
 
 @csrf_exempt
 def createBid(request):
@@ -183,7 +186,12 @@ def createFurniture(request):
             except:
                 received_json_data = request.POST
             name = received_json_data["name"]
-            seller_id = received_json_data['seller']
+            if "seller_id" in received_json_data:
+                seller_id = received_json_data['seller']
+            else:
+                auth_obj = Authenticator.objects.get(
+                    authenticator=received_json_data["auth"])
+                seller_id = auth_obj.person_id.id
             category_names = received_json_data['category'].split(",")
             description = received_json_data["description"]
             price = received_json_data["price"]
@@ -227,8 +235,8 @@ def createFurniture(request):
                 "id": obj.pk
             }
             return JsonResponse(return_dict)
-        except Exception as ex:
-            return JsonResponse({"Status": str(ex)})
+        except Exception as e:
+            return JsonResponse({"Status": str(e)})
     else:
         return JsonResponse({"Status": "Something went wrong"})
 

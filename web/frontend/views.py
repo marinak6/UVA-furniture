@@ -13,10 +13,26 @@ from django.shortcuts import (
 from .forms import (CreateListingForm, CreateRegisterForm)
 
 
+def logged_in():
+    try:
+        auth_user = request.COOKIES.get('authenticator')
+    except:
+        auth_user = ""
+
+    if auth_user:
+        return True
+    else:
+        return False
+
+
 def home(request):
     req = urllib.request.Request('http://exp:8000/api/v1/')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
+    if logged_in:
+        resp["logged_in"] = True
+    else:
+        resp["logged_in"] = False
     return render(request, 'home.html', {'resp': resp["Res"]})
 
 
@@ -53,14 +69,21 @@ def login(request):
 
             # we can now log them in
             authenticator = response['authenticator']
-            response = HttpResponseRedirect(reverse('frontend:index'))
+            if request.GET.get('next'):
+                response = redirect(request.GET.get('next'))
+            else:
+                response = HttpResponseRedirect(reverse('frontend:index'))
             response.set_cookie('authenticator', authenticator)
             return response
         except Exception as error:
             args = {'error': str(error)}
             return render(request, "login.html", args)
     else:
-        return render(request, 'login.html')
+        if request.GET.get('next'):
+            next_link = request.GET.get('next')
+        else:
+            next_link = reverse(home)
+        return render(request, 'login.html', {"next_link": next_link})
 
 
 def logout(request):
@@ -70,6 +93,9 @@ def logout(request):
 
 
 def create_listing(request):
+    auth_user = request.COOKIES.get('authenticator')
+    if not auth_user:
+        return HttpResponseRedirect(reverse("frontend:login") + "?next=" + reverse("frontend:create_listing"))
     if request.method == "POST":
         form = CreateListingForm(request.POST)
         if not form.is_valid():
@@ -77,7 +103,7 @@ def create_listing(request):
             return render(request, "post_item.html", form_args)
         form_data = form.cleaned_data
         # Need to change this later to auth user
-        form_data["seller"] = "1"
+        form_data["auth"] = auth_user
 
         url = 'http://exp:8000/api/v1/furniture/create'
         encode_form = urllib.parse.urlencode(form_data).encode('utf-8')
