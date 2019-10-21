@@ -32,7 +32,7 @@ All the fields in the image for the update endpoint are optional, and the only o
 All the fields in the image for the post endpoint are required, and the only ones.
 All the fields in the image for the update endpoint are optional, and the only ones.
 
-# Project 3 Checkpoint
+# Project 4 Checkpoint
 
 ## User stories
 
@@ -42,4 +42,12 @@ All the fields in the image for the update endpoint are optional, and the only o
 - As a UVA Furniture user, I want to view any furniture listing's seller description so that I can see what the seller has to say about it.
 - As a UVA Furniture user, I want to view what category the furniture belongs to so that I can look for other similar items.
 - As a UVA Furniture user, I want to know if I try to access a page that does not exist so that I know that the item does not exist or I entered the wrong url.
-- As a UVA Furniture use, I want to be notified when my furniture was bought.
+- As a UVA Furniture user, I want to be able to register to sell and buy items.
+- As a UVA Furniture user, I want to stay logged in if I leave the site and come back later so I don't have to re-login.
+- As a UVA Furniture user, I want to be able to view items even when I'm not logged in.
+- As a UVA Furniture user, I want to only purchase items from registered users so I know they are verified users.
+- As a UVA Furniture user, I want my password to be protected if I register or login so hackers cannot access my password.
+- As a UVA Furniture user, I want to be able to logout if I am logged in.
+- As a UVA Furniture user, I want to be redirected to login if I try to access a page available to only logged-in users.
+
+

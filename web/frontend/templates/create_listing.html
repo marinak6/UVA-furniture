@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block content %}
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'css/create_listing.css' %}" />
+<link rel="stylesheet" href="{% static 'css/form_style.css' %}" />
 
 
 
@@ -14,7 +14,7 @@
         Create new Listing
       </h1>
       <h2 class="wv-heading--subtitle">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magnam, optio!
+        Enter the provided information below to sell your item!
       </h2>
     </div>
   </div>
@@ -41,7 +41,8 @@
               {% endif %}
             </div>
             {% endfor %}
-            <input type="submit" class="btn btn-primary mb-2" value="Submit" />
+            <input type="submit" class="btn btn-primary mb-2" value="Submit" style="margin-top:10%; width:100%;
+    display:block;"/>
         </form>
       </div>
     </div>
