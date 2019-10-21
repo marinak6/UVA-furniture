@@ -1,10 +1,19 @@
-{% extends 'base.html' %} {% block content %} {% if next_link %}
+{% extends 'base.html' %} {% block content %} {% load static %} <link rel="stylesheet" href="{% static 'css/form_style.css' %}" /> 
+{% if next_link %}
+
 <form action="/login/?next={{ next_link }}" method="post">
   {% else %}
   <form method="post">
     {% endif %} {% csrf_token %}
     <div class="login-form">
-      <div class="form-group">
+      <div class="form-group" style= "width:20%;">
+        <div class="col-md-6 mx-auto">
+          <div class="header-title">
+            <h1 class="wv-heading--title">
+              Login
+            </h1>
+          </div>
+        </div>
         <label for="email">Email</label>
         <input
           class="form-control"
@@ -13,7 +22,7 @@
           name="email"
           placeholder="Enter email"
         />
-        <label for="password">Password</label>
+        <label for="password" style="margin-top:10%">Password</label>
         <input
           class="form-control"
           type="password"
@@ -26,7 +35,9 @@
           class="btn btn-primary"
           name="submit"
           value="Login"
-          style="margin-top:10%"
+          style="margin-top:10%; width:100%;
+    display:block;"
+          
         >
           Login
         </button>
