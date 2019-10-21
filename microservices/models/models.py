@@ -1,16 +1,22 @@
-from django.db.models import CharField, Model
+from django.db.models import Model
 from enum import Enum
-from django.contrib.auth.models import User
 from django.db import models
 from datetime import datetime
 
 # Create your models here.
 
-
 class Person(models.Model):
-    first_name = CharField(max_length=200)
-    last_name = CharField(max_length=200)
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    password = models.TextField(null=True) # default value, but still form required
+    email = models.CharField(max_length=100, null=True)
 
+
+class Authenticator(models.Model):
+    person_id = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
+    authenticator = models.CharField(max_length=64, primary_key=True)
+    date_created = models.DateField(auto_now=True)
+    
 
 class StatusChoices(Enum):
     Accepted = "ACCEPTED"

@@ -12,3 +12,12 @@ class CreateListingForm(forms.Form):
         label='Category(Comma delimited for multiple)', required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     description = forms.CharField(
         label='Description', required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+
+class CreateRegisterForm(forms.Form):
+    first_name = forms.CharField(
+        max_length=30, required=False, help_text='Optional.')
+    last_name = forms.CharField(
+        max_length=30, required=False, help_text='Optional.')
+    password = forms.CharField(widget=forms.PasswordInput)
+    email = forms.EmailField(label='Email', max_length=100)

@@ -11,4 +11,8 @@ urlpatterns = [
     path('furniture/create', csrf_exempt(views.createFurniture),
          name='createFurniture'),
     path('admin/', admin.site.urls),
+    
+    # Authentication
+    path('register', csrf_exempt(views.register), name='register'),
+    path('login', csrf_exempt(views.login), name='login'),
 ]
