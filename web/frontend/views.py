@@ -2,7 +2,8 @@ from django.shortcuts import render
 import urllib.request
 import urllib.parse
 import json
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
+from django.urls import reverse
 
 # Create your views here.
 
@@ -71,12 +72,19 @@ def register(request):
         register_info = {
             "first_name": register_data["first_name"],
             "last_name": register_data["last_name"],
-            "email": register_data["email"],
             "password": register_data["password"],
         }
-        # authenticate user
-
-        return JsonResponse(register_info)  # need to remove later
+        try:
+            exp_service_url = 'http://exp:8000/api/v1/register'
+            encoded_register_data = urllib.parse.urlencode(register_data).encode('utf-8')
+            request2 = urllib.request.Request(exp_service_url, data=encoded_register_data, method='POST')
+            json_respsonse = urllib.request.urlopen(request2).read().decode('utf-8')
+            response = json.loads(json_respsonse)
+            return HttpResponseRedirect('login')
+        except Exception as error:
+            form = CreateRegisterForm()
+            args = {'form': form, 'error': str(error)}
+            return render(request, "register.html", args)
     else:
         form = CreateRegisterForm()
         args = {'form': form}

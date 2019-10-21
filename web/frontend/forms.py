@@ -12,11 +12,8 @@ class CreateListingForm(forms.Form):
 
 
 class CreateRegisterForm(forms.Form):
-    email = forms.EmailField(
-        max_length=254, help_text='Enter a valid email address.')
-    password = forms.CharField(widget=forms.PasswordInput)
-    username = forms.CharField(max_length=100)
     first_name = forms.CharField(
         max_length=30, required=False, help_text='Optional.')
     last_name = forms.CharField(
         max_length=30, required=False, help_text='Optional.')
+    password = forms.CharField(widget=forms.PasswordInput)

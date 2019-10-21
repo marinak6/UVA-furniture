@@ -1,13 +1,16 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Bid, Furniture, Person, Category
+from .models import Bid, Furniture, Person, Category, Authenticator
 from django.forms.models import model_to_dict
 import json
-from django.contrib.auth.models import User
 import urllib.request
 import urllib.parse
-import json
+
+# Authentication
+from django.conf import settings
+import os
+import hmac
 
 @csrf_exempt
 def create_person(request):
@@ -31,18 +34,19 @@ def create_person(request):
                 digestmod = 'sha256',
             ).hexdigest()
             
-            # save authenticator
+            # save token in Authenticator model
             my_auth = Authenticator.objects.create(
-                user_id=person,
+                person_id=person,
                 authenticator=authenticator,
             )
+            my_auth.save()
             
             # return person object 
             person_dict = model_to_dict(person)
             person_dict.pop('password')
             return JsonResponse(person_dict)
         except Exception as error:
-            return JsonResponse({"Error Message": str(error)})
+            return JsonResponse({"Microservices Register Error Message": str(error)})
 
 @csrf_exempt
 def createBid(request):

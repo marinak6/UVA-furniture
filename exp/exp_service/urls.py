@@ -11,5 +11,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     # Authentication
-    path('person/create', csrf_exempt(views.register), name='register')
+    path('register', csrf_exempt(views.register), name='register')
 ]
