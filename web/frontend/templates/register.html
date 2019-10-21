@@ -1,26 +1,47 @@
 {% extends 'base.html' %} {% block content %}
+{% load static %}
 
-<h1>Register</h1>
+<link rel="stylesheet" href="{% static 'css/form_style.css' %}" />
 
-<form method="post">
-  {% csrf_token %}
 
-  <div class="form-group">
-    {% for field in form %}
-        <div class="form-group">
-            {{field.label_tag}}
-            {{field}}
-            {% if field.help_text %}
-                <small class="form-text text-muted">{{ field.help_text }}</small>
+<div class="container">
+  <div class="col-md-6 mx-auto text-center">
+    <div class="header-title">
+      <h1 class="wv-heading--title">
+        Register
+      </h1>
+      <h2 class="wv-heading--subtitle">
+        Get started with UVA Furniture by creating an account!
+      </h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 mx-auto">
+      <div class="myform form ">
+        <form action="" method="post">
+            {% csrf_token %}
+
+            {% if form.subject.errors %}
+            <ol role="alertdialog">
+              {% for error in form.subject.errors %}
+              <li role="alert"><strong>{{ error|escape }}</strong></li>
+              {% endfor %}
+            </ol>
             {% endif %}
-        </div>
-    {% endfor%}
-  <button type="submit" name="submit" value="Register">
-    Register
-  </button>
-  <br>
-  {% if error %}
-    {{error}}
-  {% endif %}
-</form>
+            
+            {% for field in form %}
+            <div class="fieldWrapper form-group" aria-required={% if field.field.required %}"true"{% else %}"false"{% endif %}>
+              {{ field.label_tag }}{% if field.field.required %}<span class="required">*</span>{% endif %}
+              {{ field }}
+              {% if field.help_text %}
+              <p class="help">{{ field.help_text|safe }}</p>
+              {% endif %}
+            </div>
+            {% endfor %}
+            <input type="submit" class="btn btn-primary mb-2" value="Submit" />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
