@@ -13,27 +13,26 @@ from django.shortcuts import (
 from .forms import (CreateListingForm, CreateRegisterForm)
 
 
-def logged_in():
+def logged_in_render(request, template, args):
     try:
         auth_user = request.COOKIES.get('authenticator')
     except:
         auth_user = ""
 
     if auth_user:
-        return True
+        args["logged_in"] = True
     else:
-        return False
+        args["logged_in"] = False
+
+    return render(request, template, args)
 
 
 def home(request):
     req = urllib.request.Request('http://exp:8000/api/v1/')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
-    if logged_in:
-        resp["logged_in"] = True
-    else:
-        resp["logged_in"] = False
-    return render(request, 'home.html', {'resp': resp["Res"]})
+
+    return logged_in_render(request, 'home.html', {'resp': resp["Res"]})
 
 
 def item_details(request, item_id):
@@ -47,7 +46,7 @@ def item_details(request, item_id):
     # logic of status probably needs to change. We should update status for any existing items also
     if("Status" in context['item']):
         return render(request, 'invalid_access.html')
-    return render(request, 'item_details.html', context)
+    return logged_in_render(request, 'item_details.html', context)
 
 
 def login(request):
@@ -118,7 +117,7 @@ def create_listing(request):
         form = CreateListingForm()
         form_args = {'form': form}
         # need to change to auth_render
-        return render(request, "create_listing.html", form_args)
+        return logged_in_render(request, "create_listing.html", form_args)
 
 
 def register(request):

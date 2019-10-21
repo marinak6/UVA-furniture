@@ -57,14 +57,20 @@
               >Sell</a
             >
           </li>
+          {% if logged_in %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'frontend:logout' %}">Logout</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'frontend:login' %}">Login</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'frontend:register' %}"
               >Register</a
             >
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'frontend:login' %}">Login</a>
-          </li>
+          {% endif %}
         </ul>
       </div>
     </nav>
