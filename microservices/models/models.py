@@ -1,4 +1,4 @@
-from django.db.models import CharField, Model
+from django.db.models import Model
 from enum import Enum
 from django.contrib.auth.models import User
 from django.db import models
@@ -13,8 +13,9 @@ class Authenticator(models.Model):
     
 
 class Person(models.Model):
-    first_name = CharField(max_length=200)
-    last_name = CharField(max_length=200)
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    password = models.TextField(null=True) # default value, but still form required
 
 
 class StatusChoices(Enum):
