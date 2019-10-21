@@ -49,7 +49,11 @@ def check_login(request):
 @csrf_exempt
 def create_person(request):
     if request.method == 'POST':
-        form_data = request.POST
+        try:
+            form_data = json.loads(request.body.decode("utf-8"))
+        except:
+            form_data = request.POST
+
         try:
             first_name = form_data['first_name']
             last_name = form_data['last_name']

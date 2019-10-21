@@ -26,7 +26,6 @@ class CreateFurnitureListing(TestCase):
         request = {
             "name": "TV5005",
             "seller": 1,
-            "is_bought": "True",
             "category": ["New Item", "Furniture"],
             "price": 10,
             "description": "New Chair, great quality"
@@ -107,15 +106,94 @@ class CreateBid(TestCase):
         response = self.c.post(
             '/api/v1/bid/create', request)
         res_message = json.loads(response.content.decode("utf-8"))
-        print(res_message)
 
         self.assertEqual(res_message["status"], 'PENDING')
+
+
+class CreatePersonWithPassword(TestCase):
+
+    def setUp(self):
+        self.c = Client()
+
+    # Makes sure hash works
+    def test_password(self):
+        request = {
+            "first_name": "Bryan",
+            "last_name": "tran",
+            "password": "abc123",
+            "email": "bt2kg@virgina.edu"
+        }
+        response = self.c.post(
+            '/api/v1/person/create', request)
+        res_message = json.loads(response.content.decode("utf-8"))
+
+        person = Person.objects.get(email="bt2kg@virgina.edu")
+
+        self.assertNotEqual(person.password, 'abc123')
 
 
 class CreateAuth(TestCase):
     def setUp(self):
         self.c = Client()
-        p = Person(first_name="Bryan", last_name="Tran")
-        p.save()
 
-    def create_auth:
+    def test_create_auth(self):
+        request = {
+            "first_name": "Bryan",
+            "last_name": "tran",
+            "password": "abc123",
+            "email": "bt2kg@virgina.edu"
+        }
+        response = self.c.post(
+            '/api/v1/person/create', request)
+        person = Person.objects.get(email="bt2kg@virgina.edu")
+        auth_obj = Authenticator.objects.get(
+            person_id=person.pk)
+        self.assertNotEqual(auth_obj.authenticator, None)
+
+    def test_create_furniture_with_valid_auth(self):
+        request = {
+            "first_name": "Bryan",
+            "last_name": "tran",
+            "password": "abc123",
+            "email": "bt2kg@virgina.edu"
+        }
+        response = self.c.post(
+            '/api/v1/person/create', request)
+        person = Person.objects.get(email="bt2kg@virgina.edu")
+        auth_obj = Authenticator.objects.get(
+            person_id=person.pk)
+        request = {
+            "name": "TV5005",
+            "auth": auth_obj.authenticator,
+            "category": ["New Item", "Furniture"],
+            "price": 10,
+            "description": "New Chair, great quality"
+        }
+        response = self.c.post(
+            '/api/v1/furniture/create', request)
+        res_message = json.loads(response.content.decode("utf-8"))
+        self.assertEqual("id" in res_message, True)
+
+    def test_create_furniture_with_invalid_auth(self):
+        request = {
+            "first_name": "Bryan",
+            "last_name": "tran",
+            "password": "abc123",
+            "email": "bt2kg@virgina.edu"
+        }
+        response = self.c.post(
+            '/api/v1/person/create', request)
+        person = Person.objects.get(email="bt2kg@virgina.edu")
+        auth_obj = Authenticator.objects.get(
+            person_id=person.pk)
+        request = {
+            "name": "TV5005",
+            "auth": "incorrect",
+            "category": ["New Item", "Furniture"],
+            "price": 10,
+            "description": "New Chair, great quality"
+        }
+        response = self.c.post(
+            '/api/v1/furniture/create', request)
+        res_message = json.loads(response.content.decode("utf-8"))
+        self.assertEqual("id" in res_message, False)
