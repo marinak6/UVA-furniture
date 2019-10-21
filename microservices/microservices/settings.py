@@ -25,7 +25,7 @@ SECRET_KEY = ')ah=65c72x!y#7x)_gf##3x!17trz+2t+ly)@7x6ql&7_+9=e4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'microservices']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition

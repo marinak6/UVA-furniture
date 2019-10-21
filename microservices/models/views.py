@@ -117,16 +117,13 @@ def createFurniture(request):
                 received_json_data = request.POST
             name = received_json_data["name"]
             seller_id = received_json_data['seller']
-            is_bought = received_json_data['is_bought']
-            category_names = received_json_data['category']
+            category_names = received_json_data['category'].split(",")
             description = received_json_data["description"]
             price = received_json_data["price"]
 
             seller = Person.objects.get(id=seller_id)
             if not seller:
                 return JsonResponse({"Status": "Seller is Invalid"})
-            if not (is_bought == "True" or is_bought == "False"):
-                return JsonResponse({"Status": "is_bought is Invalid"})
 
             if type(category_names) != list:
                 category_names = [category_names]
@@ -134,7 +131,7 @@ def createFurniture(request):
                 name=name,
                 current_bid_id=None,
                 seller=seller,
-                is_bought=is_bought,
+                is_bought=False,
                 buyer=None,
                 description=description,
                 price=price,
@@ -153,7 +150,8 @@ def createFurniture(request):
                 "category": category_names,
                 "buyer_id": "",
                 "price": price,
-                "description": description
+                "description": description,
+                "id": obj.pk
             }
             return JsonResponse(return_dict)
         except Exception as ex:

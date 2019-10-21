@@ -37,16 +37,31 @@ def item_details(request, item_id):
 
 def create_listing(request):
     if request.method == "POST":
-        received_json_data = request.POST
-        listing = {
-            "name": received_json_data["name"],
-            "category_names": received_json_data['categories'].split(","),
-            "description": received_json_data["description"],
-            "price": received_json_data["price"]
-        }
-        return JsonResponse(listing)
+        # received_json_data = request.POST
+        # listing = {
+        #     "name": received_json_data["name"],
+        #     "category_names": received_json_data['category'].split(","),
+        #     "description": received_json_data["description"],
+        #     "price": received_json_data["price"]
+        # }
+        # return JsonResponse(listing)
+        form = CreateListingForm(request.POST)
+        if not form.is_valid():
+            form_args = {'form': form}
+            return render(request, "post_item.html", form_args)
+        form_data = form.cleaned_data
+        # Need to change this later to auth user
+        form_data["seller"] = "1"
+
+        url = 'http://exp:8000/api/v1/furniture/create'
+        post_encoded = urllib.parse.urlencode(form_data).encode('utf-8')
+        req2 = urllib.request.Request(url, data=post_encoded, method='POST')
+        resp_json = urllib.request.urlopen(req2).read().decode('utf-8')
+
+        resp = json.loads(resp_json)
+        return JsonResponse(resp)
     else:
         form = CreateListingForm()
-        args = {'form': form}
+        form_args = {'form': form}
         # need to change to auth_render
-        return render(request, "create_listing.html", args)
+        return render(request, "create_listing.html", form_args)

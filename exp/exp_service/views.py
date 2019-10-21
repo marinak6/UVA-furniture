@@ -29,3 +29,16 @@ def item(request, item_id):
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
     return JsonResponse(resp)
+
+
+@csrf_exempt
+def createFurniture(request):
+    post_data = request.POST
+
+    url = 'http://microservices:8000/api/v1/furniture/create'
+    post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+    req = urllib.request.Request(url, data=post_encoded, method='POST')
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+
+    return JsonResponse(resp)
