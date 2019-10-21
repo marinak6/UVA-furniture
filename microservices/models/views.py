@@ -9,6 +9,40 @@ import urllib.request
 import urllib.parse
 import json
 
+@csrf_exempt
+def create_person(request):
+    if request.method == 'POST':
+        form_data = request.POST 
+        try:
+            first_name = form_data['first_name']
+            last_name = form_data['last_name']
+            password = form_data['password']
+            person = Person.objects.create(
+                first_name=first_name,
+                last_name=last_name,
+                password=password,
+            )
+            person.save()
+            
+            # generate authentiactor token
+            authenticator = hmac.new(
+                key = settings.SECRET_KEY.encode('utf-8'),
+                msg = os.urandom(32),
+                digestmod = 'sha256',
+            ).hexdigest()
+            
+            # save authenticator
+            my_auth = Authenticator.objects.create(
+                user_id=person,
+                authenticator=authenticator,
+            )
+            
+            # return person object 
+            person_dict = model_to_dict(person)
+            person_dict.pop('password')
+            return JsonResponse(person_dict)
+        except Exception as error:
+            return JsonResponse({"Error Message": str(error)})
 
 @csrf_exempt
 def createBid(request):
