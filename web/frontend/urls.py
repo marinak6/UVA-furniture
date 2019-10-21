@@ -10,6 +10,7 @@ urlpatterns = [
     path('item/<int:item_id>', views.item_details, name="item_details"),
     path('login', views.login, name='login'),
     path('admin/', admin.site.urls),
+    path('register', views.register, name="register"),
     path('create_listing/', views.create_listing, name="create_listing"),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

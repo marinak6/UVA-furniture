@@ -9,3 +9,14 @@ class CreateListingForm(forms.Form):
         label='Categories(Comma delimited)', widget=forms.Textarea, required=False)
     description = forms.CharField(
         label='Description', widget=forms.Textarea, required=False)
+
+
+class CreateRegisterForm(forms.Form):
+    email = forms.EmailField(
+        max_length=254, help_text='Enter a valid email address.')
+    password = forms.CharField(widget=forms.PasswordInput)
+    username = forms.CharField(max_length=100)
+    first_name = forms.CharField(
+        max_length=30, required=False, help_text='Optional.')
+    last_name = forms.CharField(
+        max_length=30, required=False, help_text='Optional.')
