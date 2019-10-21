@@ -23,4 +23,5 @@ urlpatterns = [
     
     # OTHER
     path('newest_items', csrf_exempt(views.newest_items), name='newest_items'),
+    path('login', csrf_exempt(views.check_login), name='check-login'),
 ]

@@ -12,6 +12,27 @@ from django.conf import settings
 import os
 import hmac
 
+
+@csrf_exempt
+def check_login(request):
+    if request.method == 'POST':
+        form_data = request.POST 
+        try:
+            email = form_data['email']
+            password = form_data['password']
+            person = Person.objects.filter(email=email)
+            if len(person) == 1:
+                if check_password(password, person[0].password):
+                    auth = Authenticator.objects.get(person_id=person[0]).authenticator
+                    return JsonResponse({'authenticator': auth})
+                else:
+                    return JsonResponse({'error': 'password is wrong'})
+            else:
+                return JsonResponse({'error': 'email is wrong'})
+        except Exception as error:
+            return JsonResponse({"Microservices Login Error Message": str(error)})
+
+
 @csrf_exempt
 def create_person(request):
     if request.method == 'POST':
@@ -27,7 +48,7 @@ def create_person(request):
             )
             person.save()
             
-            # generate authentiactor token
+            # generate authenticator token
             authenticator = hmac.new(
                 key = settings.SECRET_KEY.encode('utf-8'),
                 msg = os.urandom(32),
