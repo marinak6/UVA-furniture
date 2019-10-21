@@ -65,7 +65,9 @@ def login(request):
             json_respsonse = urllib.request.urlopen(
                 request2).read().decode('utf-8')
             response = json.loads(json_respsonse)
-
+            if "error" in response:
+                args = {'error': "Incorrect credentials"}
+                return render(request, "login.html", args)
             # we can now log them in
             authenticator = response['authenticator']
             if request.GET.get('next'):

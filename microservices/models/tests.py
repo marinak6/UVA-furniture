@@ -131,6 +131,46 @@ class CreatePersonWithPassword(TestCase):
 
         self.assertNotEqual(person.password, 'abc123')
 
+    def test_login(self):
+        request = {
+            "first_name": "Bryan",
+            "last_name": "tran",
+            "password": "abc123",
+            "email": "bt2kg@virgina.edu"
+        }
+        response = self.c.post(
+            '/api/v1/person/create', request)
+        res_message = json.loads(response.content.decode("utf-8"))
+        request2 = {
+            "password": "abc123",
+            "email": "bt2kg@virgina.edu"
+        }
+
+        response2 = self.c.post(
+            '/api/v1/login/', request2)
+        res_message = json.loads(response2.content.decode("utf-8"))
+        self.assertEqual("authenticator" in res_message, True)
+
+    def test_login_wrong_email(self):
+        request = {
+            "first_name": "Bryan",
+            "last_name": "tran",
+            "password": "abc123",
+            "email": "bt2kg@virgina.edu"
+        }
+        response = self.c.post(
+            '/api/v1/person/create', request)
+        res_message = json.loads(response.content.decode("utf-8"))
+        request2 = {
+            "password": "abc123",
+            "email": "wrong@virgina.edu"
+        }
+
+        response2 = self.c.post(
+            '/api/v1/login/', request2)
+        res_message = json.loads(response2.content.decode("utf-8"))
+        self.assertEqual("authenticator" in res_message, False)
+
 
 class CreateAuth(TestCase):
     def setUp(self):
