@@ -1,6 +1,7 @@
 from kafka import KafkaConsumer
 from kafka import errors as Errors
 from elasticsearch import Elasticsearch
+import json
 
 
 es = Elasticsearch(['es'])
