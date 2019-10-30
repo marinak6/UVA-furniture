@@ -47,7 +47,18 @@ services:
       ADVERTISED_HOST: kafka
       ADVERTISED_PORT: 9092
    hostname: kafka
-   
+
+  batch:
+    image: tp33/django
+    container_name: batch
+    volumes:
+      - ./:/app
+    networks:
+        - batch_network
+    depends_on:
+      - kafka
+    command: "python searchIndexer.py"
+        
   es:
     image: elasticsearch:7.4.0
     container_name: es
@@ -55,19 +66,12 @@ services:
         - discovery.type=single-node
     networks:
         - service_mesh
-        - mod_exp_network
+        - batch_network
     ports:
         - "9200:9200"
-
-  batch:
-    image: tp33/django
-    container_name: batch
-    networks:
-        - batch_network
 
 networks:
   backend:
   service_mesh:
   public:
   batch_network:
-  mod_exp_network:
