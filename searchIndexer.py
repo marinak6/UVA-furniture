@@ -37,4 +37,6 @@ while(True):
             # Index message in ES
             es.index(index='listing_index', doc_type='listing',
                      id=item['id'], body=item)
+            es.update(index='listing_index', doc_type='listing', id=item['id'], body={
+                      'script': 'ctx._source.visits = 0'})
             es.indices.refresh(index="listing_index")
