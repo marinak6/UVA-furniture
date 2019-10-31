@@ -356,6 +356,20 @@ def newest_items(request):
 
 
 @csrf_exempt
+def get_items(request):
+    furnitures = Furniture.objects
+    res = []
+    for furniture in furnitures:
+        req = urllib.request.Request(
+            'http://microservices:8000/api/v1/furniture/'+str(furniture.pk))
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        res.append(resp)
+
+    return JsonResponse({"Res": res})
+
+
+@csrf_exempt
 def logout(request):
     received_json_data = request.POST
     try:
