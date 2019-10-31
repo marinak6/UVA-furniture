@@ -7,7 +7,10 @@ import urllib.request
 import urllib.parse
 import json
 from django.http import JsonResponse
+from kafka import KafkaProducer
+
 # Create your views here.
+producer = KafkaProducer(bootstrap_servers='kafka:9092')
 
 
 @csrf_exempt
@@ -79,6 +82,7 @@ def createFurniture(request):
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
 
+    producer.send('new-listings-topic', json.dumps(resp).encode('utf-8'))
     return JsonResponse(resp)
 
 
