@@ -66,6 +66,7 @@ services:
       - ./:/app
     networks:
         - batch_network
+        - service_mesh
     depends_on:
       - kafka
       - es

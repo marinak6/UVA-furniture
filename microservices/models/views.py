@@ -357,7 +357,7 @@ def newest_items(request):
 
 @csrf_exempt
 def get_items(request):
-    furnitures = Furniture.objects
+    furnitures = Furniture.objects.order_by('-timestamp')
     res = []
     for furniture in furnitures:
         req = urllib.request.Request(
