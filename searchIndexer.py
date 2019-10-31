@@ -23,4 +23,3 @@ while(True):
             es.index(index='listing_index', doc_type='listing',
                      id=item['id'], body=item)
             es.indices.refresh(index="listing_index")
-            print(item['name'])
