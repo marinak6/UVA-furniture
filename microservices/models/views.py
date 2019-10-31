@@ -3,7 +3,6 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Bid, Furniture, Person, Category, Authenticator
 from django.forms.models import model_to_dict
-from kafka import KafkaProducer
 import json
 import urllib.request
 import urllib.parse
@@ -254,10 +253,7 @@ def createFurniture(request):
                 "description": description,
                 "id": obj.pk
             }
-            producer = KafkaProducer(bootstrap_servers='kafka:9092')
-            some_new_listing = return_dict
-            producer.send('new-listings-topic',
-                          json.dumps(some_new_listing).encode('utf-8'))
+
             return JsonResponse(return_dict)
         except Exception as e:
             return JsonResponse({"Status": str(e)})
