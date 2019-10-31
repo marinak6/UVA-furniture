@@ -68,7 +68,9 @@ services:
         - batch_network
     depends_on:
       - kafka
+      - es
     command: "python searchIndexer.py"
+    restart: on-failure
 
 networks:
   backend:
