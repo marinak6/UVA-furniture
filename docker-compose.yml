@@ -25,7 +25,7 @@ services:
     volumes:
       - ./exp:/app
     command: "mod_wsgi-express start-server --reload-on-changes ./exp/wsgi.py"
-    
+
   web:
     image: tp33/django
     container_name: web
@@ -38,39 +38,39 @@ services:
     command: "mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
 
   kafka:
-   image: spotify/kafka
-   container_name: kafka
-   networks:
+    image: spotify/kafka
+    container_name: kafka
+    networks:
       - batch_network
       - service_mesh
-   environment:
+    environment:
       ADVERTISED_HOST: kafka
       ADVERTISED_PORT: 9092
-   hostname: kafka
-  
+    hostname: kafka
+
   es:
     image: elasticsearch:7.4.0
     container_name: es
     environment:
-        - discovery.type=single-node
+      - discovery.type=single-node
     networks:
-        - batch_network
-        - service_mesh
+      - batch_network
+      - service_mesh
     ports:
-        - "9200:9200"
-  
+      - "9200:9200"
+
   batch:
     image: tp33/django
     container_name: batch
     volumes:
       - ./:/app
     networks:
-        - batch_network
-        - service_mesh
+      - batch_network
+      - service_mesh
     depends_on:
       - kafka
       - es
-    command: "python searchIndexer.py"
+    command: bash -c "python searchIndexer.py & python appendLogfile.py & python parseLogfile.py"
     restart: on-failure
 
 networks:

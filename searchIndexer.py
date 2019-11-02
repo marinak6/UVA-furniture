@@ -8,7 +8,11 @@ import json
 
 es = Elasticsearch(['es'])
 connected = False
+es_connected = False
 
+while not es_connected:
+    if es.ping():
+        es_connected = True
 # Index fixtures
 req = urllib.request.Request(
     'http://microservices:8000/api/v1/get_items')

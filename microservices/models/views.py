@@ -380,3 +380,21 @@ def logout(request):
         return JsonResponse({"Status": str(ex)})
 
     return JsonResponse({"Status": "Deleted"})
+
+
+@csrf_exempt
+def auth_to_id(request):
+    if request.method == "POST":
+        try:
+            received_json_data = json.loads(request.body.decode("utf-8"))
+        except:
+            received_json_data = request.POST
+
+        try:
+            auth_obj = Authenticator.objects.get(
+                authenticator=received_json_data["auth"])
+        except:
+            return JsonResponse({"user_id": -1})
+
+        user_id = auth_obj.person_id.id
+        return JsonResponse({"user_id": user_id})

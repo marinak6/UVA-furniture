@@ -37,15 +37,28 @@ def home(request):
 
 def item_details(request, item_id):
     # get item
-    req = urllib.request.Request('http://exp:8000/api/v1/item/'+str(item_id))
-    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+
+    auth_user = request.COOKIES.get('authenticator')
+
+    if not auth_user:
+        form_data = {"auth": -1}
+    else:
+        form_data = {"auth": auth_user}
+
+    url = 'http://exp:8000/api/v1/item/'+str(item_id)
+    encode_form = urllib.parse.urlencode(form_data).encode('utf-8')
+    new_request = urllib.request.Request(
+        url, data=encode_form, method='POST')
+    resp_json = urllib.request.urlopen(new_request).read().decode('utf-8')
     item = json.loads(resp_json)
     context = {
         'item': item
     }
+
     # logic of status probably needs to change. We should update status for any existing items also
     if("Status" in context['item']):
         return render(request, 'invalid_access.html')
+
     return logged_in_render(request, 'item_details.html', context)
 
 
