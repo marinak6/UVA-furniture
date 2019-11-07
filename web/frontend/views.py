@@ -33,6 +33,11 @@ def home(request):
     resp = json.loads(resp_json)
 
     return logged_in_render(request, 'home.html', {'resp': resp["Res"]})
+    
+
+def search(request):
+    query = request.GET.get('query', '') # default set to ''
+    return logged_in_render(request, 'search.html', {'query': query})
 
 
 def item_details(request, item_id):
