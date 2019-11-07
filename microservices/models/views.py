@@ -253,6 +253,7 @@ def createFurniture(request):
                 "description": description,
                 "id": obj.pk
             }
+
             return JsonResponse(return_dict)
         except Exception as e:
             return JsonResponse({"Status": str(e)})
@@ -355,6 +356,20 @@ def newest_items(request):
 
 
 @csrf_exempt
+def get_items(request):
+    furnitures = Furniture.objects.order_by('-timestamp')
+    res = []
+    for furniture in furnitures:
+        req = urllib.request.Request(
+            'http://microservices:8000/api/v1/furniture/'+str(furniture.pk))
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        res.append(resp)
+
+    return JsonResponse({"Res": res})
+
+
+@csrf_exempt
 def logout(request):
     received_json_data = request.POST
     try:
@@ -365,3 +380,21 @@ def logout(request):
         return JsonResponse({"Status": str(ex)})
 
     return JsonResponse({"Status": "Deleted"})
+
+
+@csrf_exempt
+def auth_to_id(request):
+    if request.method == "POST":
+        try:
+            received_json_data = json.loads(request.body.decode("utf-8"))
+        except:
+            received_json_data = request.POST
+
+        try:
+            auth_obj = Authenticator.objects.get(
+                authenticator=received_json_data["auth"])
+        except:
+            return JsonResponse({"user_id": -1})
+
+        user_id = auth_obj.person_id.id
+        return JsonResponse({"user_id": user_id})

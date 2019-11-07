@@ -18,6 +18,7 @@ urlpatterns = [
          csrf_exempt(views.update_furniture), name='update_furniture'),
     path('bid/<int:id>', csrf_exempt(views.bid), name='bid'),
     path('bid/<int:id>/update', csrf_exempt(views.updateBid), name='update-bid'),
+    path('auth_to_id', csrf_exempt(views.auth_to_id), name='auth_to_id'),
 
     # DELETE
     path('furniture/<int:id>/delete',
@@ -26,6 +27,7 @@ urlpatterns = [
 
     # OTHER
     path('newest_items', csrf_exempt(views.newest_items), name='newest_items'),
+    path('get_items', csrf_exempt(views.get_items), name='get_items'),
     path('login', csrf_exempt(views.check_login), name='check-login'),
     path('login/', csrf_exempt(views.check_login), name='check-login'),
 

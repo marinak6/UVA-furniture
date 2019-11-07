@@ -6,8 +6,13 @@ from django.views.decorators.csrf import csrf_exempt
 import urllib.request
 import urllib.parse
 import json
+from elasticsearch import Elasticsearch
 from django.http import JsonResponse
+from kafka import KafkaProducer
+
 # Create your views here.
+producer = KafkaProducer(bootstrap_servers='kafka:9092')
+producer2 = KafkaProducer(bootstrap_servers='kafka:9092')
 
 
 @csrf_exempt
@@ -57,15 +62,47 @@ def home(request):
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
     return JsonResponse(resp)
+    
+
+@csrf_exempt
+def search(request):
+    query = request.GET.get('query')
+    es = Elasticsearch(['es'])
+    res = es.search(index='listing_index', body={"query": {"function_score": {"query": {"query_string": {"query": query}},"field_value_factor": {"field": "visits","modifier": "log1p","missing": 0.1}}}})
+    return JsonResponse({'ok': True, 'result': res['hits']['hits']})
 
 
 @csrf_exempt
 def item(request, item_id):
+    try:
+        received_json_data = json.loads(request.body.decode("utf-8"))
+    except:
+        received_json_data = request.POST
+
+    auth = received_json_data["auth"]
+    if auth == -1:
+        user_id = -1
+    else:
+        url = 'http://microservices:8000/api/v1/auth_to_id'
+        encode_form = urllib.parse.urlencode(
+            received_json_data).encode('utf-8')
+        new_request = urllib.request.Request(
+            url, data=encode_form, method='POST')
+        resp_json = urllib.request.urlopen(
+            new_request).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        user_id = resp["user_id"]
+
+    data_for_producer = {"user_id": user_id, "item_id": item_id}
+    producer2.send('page-view',
+                   json.dumps(data_for_producer).encode('utf-8'))
+
     req = urllib.request.Request(
         'http://microservices:8000/api/v1/furniture/'+str(item_id))
 
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
+
     return JsonResponse(resp)
 
 
@@ -79,6 +116,7 @@ def createFurniture(request):
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
 
+    producer.send('new-listings-topic', json.dumps(resp).encode('utf-8'))
     return JsonResponse(resp)
 
 
