@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 import urllib.request
 import urllib.parse
 import json
+from elasticsearch import Elasticsearch
 from django.http import JsonResponse
 from kafka import KafkaProducer
 
@@ -61,6 +62,14 @@ def home(request):
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
     return JsonResponse(resp)
+    
+
+@csrf_exempt
+def search(request):
+    query = request.GET.get('query')
+    es = Elasticsearch(['es'])
+    res = es.search(index='listing_index', body={'query': {'simple_query_string': {'query': query}}, 'size': 10})
+    return JsonResponse({'ok': True, 'result': res['hits']['hits']})
 
 
 @csrf_exempt

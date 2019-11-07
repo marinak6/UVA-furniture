@@ -36,8 +36,15 @@ def home(request):
     
 
 def search(request):
-    query = request.GET.get('query', '') # default set to ''
-    return logged_in_render(request, 'search.html', {'query': query})
+    query = request.GET.get('query', '') # defaults to ''
+    encoded_query = urllib.parse.urlencode({'query': query})
+    url = 'http://exp:8000/api/v1/search/?{}'.format(encoded_query)
+    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    result = []
+    if 'result' in resp:
+        result = [i['_source'] for i in resp['result']]
+    return logged_in_render(request, 'search.html', {'query': query, 'results': result})
 
 
 def item_details(request, item_id):

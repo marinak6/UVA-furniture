@@ -1,9 +1,36 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="container-fluid">
-  <div class="row">
-    <p> Search Results Page: {{ query }} </p>
+<body>
+  <div class="container-fluid" style="padding-top: 10px; padding-left: 30px; padding-bottom: 10px">
+    <div class="row">
+      <h3>Search: {{query}}</h3> 
+    </div>
+    <br>
+    <div class="row">
+      <ol>
+      {% for item in results %}
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">{{item.name}}</h5>
+            <p class="card-text">Seller: {{item.seller}}</p>
+          </div>
+          <div class="card-body">
+            <p class="card-text">${{item.price}}</p>
+            <p class="card-text">{{item.description}}</p>
+            <a href="#" class="btn btn-primary">Item Details</a>
+          </div>
+          <div class="card-footer text-muted">
+            Posted: {{item.timestamp}}
+          </div>
+        </div>
+        <br>
+      {% endfor %}
+      </ol>
+      {% if not results %}
+        <h5>No results found...</h5>
+      {% endif %}
+    </div>
   </div>
-</div>
+</body>
 
 {% endblock %}
