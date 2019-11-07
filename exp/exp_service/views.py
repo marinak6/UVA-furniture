@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 import urllib.request
 import urllib.parse
 import json
+import re
 from elasticsearch import Elasticsearch
 from django.http import JsonResponse
 from kafka import KafkaProducer
@@ -66,10 +67,17 @@ def home(request):
 
 @csrf_exempt
 def search(request):
-    query = request.GET.get('query')
-    es = Elasticsearch(['es'])
-    res = es.search(index='listing_index', body={"query": {"function_score": {"query": {"query_string": {"query": query}},"field_value_factor": {"field": "visits","modifier": "log1p","missing": 0.1}}}})
-    return JsonResponse({'ok': True, 'result': res['hits']['hits']})
+    if request.method == 'POST':
+        query = request.POST.get('query')
+        query_cleaned = re.sub('[^A-Za-z0-9]+', ' ', query)
+        try:
+            es = Elasticsearch(['es'])
+            response = es.search(index='listing_index', body={"query": {"function_score": {"query": {"query_string": {"query": query_cleaned}},"field_value_factor": {"field": "visits","modifier": "log1p","missing": 0.1}}}})
+            return JsonResponse({'listings': response['hits']['hits']}) # ['hits']['hits'] is where matches are
+        except Exception as error:
+            return JsonResponse({'ERROR': str(error)})
+    else:
+        return JsonResponse({'ERROR': 'Sent GET request to POST api'})
 
 
 @csrf_exempt

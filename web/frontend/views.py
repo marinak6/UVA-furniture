@@ -1,14 +1,9 @@
-from django.shortcuts import render
+from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, render_to_response, get_object_or_404
+from django.urls import reverse
 import urllib.request
 import urllib.parse
 import json
-from django.http import JsonResponse, HttpResponseRedirect
-from django.urls import reverse
-
-# Create your views here.
-
-from django.shortcuts import (
-    get_object_or_404, redirect, render, render_to_response)
 
 from .forms import (CreateListingForm, CreateRegisterForm)
 
@@ -37,15 +32,19 @@ def home(request):
 
 def search(request):
     query = request.GET.get('query', '') # defaults to ''
-    encoded_query = urllib.parse.urlencode({'query': query})
-    url = 'http://exp:8000/api/v1/search/?{}'.format(encoded_query)
-    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
-    resp = json.loads(resp_json)
-    result = []
-    if 'result' in resp:
-        for item in resp['result']:
-            result.append(item['_source'])
-    return logged_in_render(request, 'search.html', {'query': query, 'results': result})
+    query_encoded = urllib.parse.urlencode({'query': query}).encode('utf-8')
+    api_url = 'http://exp:8000/api/v1/search/'
+    api_request = urllib.request.Request(api_url, data=query_encoded, method='POST')
+    response = urllib.request.urlopen(api_request).read()
+    response_decoded = json.loads(response.decode('utf-8'))
+    results = []
+    if 'listings' in response_decoded:
+        for listing in response_decoded['listings']:
+            results.append(listing['_source']) # _source is where model fields are stored    
+    context = {'query': query, 'results': results}
+    if 'ERROR' in response_decoded:
+        context['ERROR'] = response_decoded['ERROR']
+    return logged_in_render(request, 'search.html', context)
 
 
 def item_details(request, item_id):
