@@ -31,6 +31,7 @@ def home(request):
     
 
 def search(request):
+    sort = request.GET.get('sort', '') # defaults to ''
     query = request.GET.get('query', '') # defaults to ''
     query_encoded = urllib.parse.urlencode({'query': query}).encode('utf-8')
     api_url = 'http://exp:8000/api/v1/search/'
@@ -44,6 +45,8 @@ def search(request):
     context = {'query': query, 'results': results}
     if 'ERROR' in response_decoded:
         context['ERROR'] = response_decoded['ERROR']
+    if sort == 'true':
+        context['sort'] = True
     return logged_in_render(request, 'search.html', context)
 
 
