@@ -76,6 +76,9 @@ def item_details(request, item_id):
 
 
 def login(request):
+    auth_user = request.COOKIES.get('authenticator')
+    if auth_user:
+        return HttpResponseRedirect(reverse('frontend:index'))
     if(request.method == "POST"):
         received_login_data = request.POST
         login_info = {
