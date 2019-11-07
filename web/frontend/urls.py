@@ -10,6 +10,7 @@ urlpatterns = [
     path('item/<int:item_id>', views.item_details, name="item_details"),
     path('admin/', admin.site.urls),
     path('create_listing/', views.create_listing, name="create_listing"),
+    path('search/', views.search, name='search'),
 
     # Authentication
     path('register', views.register, name='register'),
