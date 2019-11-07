@@ -141,7 +141,7 @@ def create_listing(request):
         form = CreateListingForm(request.POST)
         if not form.is_valid():
             form_args = {'form': form}
-            return render(request, "post_item.html", form_args)
+            return render(request, "create_listing.html", form_args)
         form_data = form.cleaned_data
         # Need to change this later to auth user
         form_data["auth"] = auth_user
