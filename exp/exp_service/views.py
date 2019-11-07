@@ -69,7 +69,7 @@ def home(request):
 def search(request):
     if request.method == 'POST':
         query = request.POST.get('query')
-        query_cleaned = re.sub('[^A-Za-z0-9]+', ' ', query)
+        query_cleaned = re.sub('[^A-Za-z0-9]+', ' ', query) # removes any Elasticsearch reserved keywords
         try:
             es = Elasticsearch(['es'])
             response = es.search(index='listing_index', body={"query": {"function_score": {"query": {"query_string": {"query": query_cleaned}},"field_value_factor": {"field": "visits","modifier": "log1p","missing": 0.1}}}})
