@@ -33,6 +33,19 @@ def home(request):
     resp = json.loads(resp_json)
 
     return logged_in_render(request, 'home.html', {'resp': resp["Res"]})
+    
+
+def search(request):
+    query = request.GET.get('query', '') # defaults to ''
+    encoded_query = urllib.parse.urlencode({'query': query})
+    url = 'http://exp:8000/api/v1/search/?{}'.format(encoded_query)
+    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    result = []
+    if 'result' in resp:
+        for item in resp['result']:
+            result.append(item['_source'])
+    return logged_in_render(request, 'search.html', {'query': query, 'results': result})
 
 
 def item_details(request, item_id):
@@ -131,7 +144,7 @@ def create_listing(request):
         form = CreateListingForm(request.POST)
         if not form.is_valid():
             form_args = {'form': form}
-            return render(request, "post_item.html", form_args)
+            return render(request, "create_listing.html", form_args)
         form_data = form.cleaned_data
         # Need to change this later to auth user
         form_data["auth"] = auth_user
