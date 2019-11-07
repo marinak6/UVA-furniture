@@ -68,7 +68,7 @@ def home(request):
 def search(request):
     query = request.GET.get('query')
     es = Elasticsearch(['es'])
-    res = es.search(index='listing_index', body={'query': {'simple_query_string': {'query': query}}, 'size': 10})
+    res = es.search(index='listing_index', body={"query": {"function_score": {"query": {"query_string": {"query": query}},"field_value_factor": {"field": "visits","modifier": "log1p","missing": 0.1}}}})
     return JsonResponse({'ok': True, 'result': res['hits']['hits']})
 
 
