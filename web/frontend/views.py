@@ -43,7 +43,8 @@ def search(request):
     resp = json.loads(resp_json)
     result = []
     if 'result' in resp:
-        result = [i['_source'] for i in resp['result']]
+        for item in resp['result']:
+            result.append(item['_source'])
     return logged_in_render(request, 'search.html', {'query': query, 'results': result})
 
 
