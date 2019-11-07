@@ -68,11 +68,15 @@ def home(request):
 @csrf_exempt
 def search(request):
     if request.method == 'POST':
+        sort = request.POST.get('sort')
         query = request.POST.get('query')
         query_cleaned = re.sub('[^A-Za-z0-9]+', ' ', query) # removes any Elasticsearch reserved keywords
         try:
             es = Elasticsearch(['es'])
-            response = es.search(index='listing_index', body={"query": {"function_score": {"query": {"query_string": {"query": query_cleaned}},"field_value_factor": {"field": "visits","modifier": "log1p","missing": 0.1}}}})
+            if sort == 'true':
+                response = es.search(index='listing_index', body={"query": {"function_score": {"query": {"query_string": {"query": query_cleaned}},"field_value_factor": {"field": "visits","modifier": "log1p","missing": 0.1}}}})
+            else:
+                response = es.search(index='listing_index', body={'query': {'simple_query_string': {'query': query_cleaned}}, 'size': 10})
             return JsonResponse({'listings': response['hits']['hits']}) # ['hits']['hits'] is where matches are
         except Exception as error:
             return JsonResponse({'ERROR': str(error)})

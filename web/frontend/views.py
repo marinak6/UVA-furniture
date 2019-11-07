@@ -31,9 +31,9 @@ def home(request):
     
 
 def search(request):
-    sort = request.GET.get('sort', '') # defaults to ''
-    query = request.GET.get('query', '') # defaults to ''
-    query_encoded = urllib.parse.urlencode({'query': query}).encode('utf-8')
+    sort = request.GET.get('sort')
+    query = request.GET.get('query')
+    query_encoded = urllib.parse.urlencode({'query': query, 'sort': sort}).encode('utf-8')
     api_url = 'http://exp:8000/api/v1/search/'
     api_request = urllib.request.Request(api_url, data=query_encoded, method='POST')
     response = urllib.request.urlopen(api_request).read()
