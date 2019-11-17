@@ -37,6 +37,17 @@ services:
       - ./web:/app
     command: "mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
 
+  web2:
+    image: tp33/django
+    container_name: web2
+    networks:
+      - public
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./web:/app
+    command: "mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
+
   kafka:
     image: spotify/kafka
     container_name: kafka
@@ -59,19 +70,32 @@ services:
     ports:
       - "9200:9200"
 
-  batch:
-    image: tp33/django
-    container_name: batch
-    volumes:
-      - ./:/app
+  # batch:
+  #   image: tp33/django
+  #   container_name: batch
+  #   volumes:
+  #     - ./:/app
+  #   networks:
+  #     - batch_network
+  #     - service_mesh
+  #   depends_on:
+  #     - kafka
+  #     - es
+  #   command: bash -c "python searchIndexer.py & python appendLogfile.py & python parseLogfile.py"
+  #   restart: on-failure
+
+  haproxy:
+    image: haproxy
+    ports:
+      - "80:80"
+      - "443:443"
     networks:
-      - batch_network
-      - service_mesh
+      - public
     depends_on:
-      - kafka
-      - es
-    command: bash -c "python searchIndexer.py & python appendLogfile.py & python parseLogfile.py"
-    restart: on-failure
+      - web
+      - web2
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
 
 networks:
   backend:
