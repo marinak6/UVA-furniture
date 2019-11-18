@@ -17,6 +17,6 @@ install:
   - echo "No dependencies"
 #   - sleep 600
 script:
-  - sleep 10
-  - echo "No tests"
-  # - docker exec -it microservices python manage.py test
+  - sleep 300
+  - docker exec -it microservices python manage.py test
+  # - echo "No tests"
