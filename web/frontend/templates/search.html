@@ -1,75 +1,95 @@
 {% extends 'base.html' %} {% block content %}
 
-<body>
-  <div
-    class="container-fluid"
-    style="padding-top: 10px; padding-left: 30px; padding-bottom: 10px"
-  >
-    <div class="row">
-      <h3>Search: "{{ query }}"</h3>
-    </div>
-    <div class="row">
-      <form action="{% url 'frontend:search' %}">
-        {% if sort %}
-          <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-secondary">
-              <input type="radio" name="sort" value=false> Default Sort
-            </label>
-            <label class="btn btn-secondary active">
-              <input type="radio" name="sort" value=true checked> Frequency Sort
-            </label>
+<div class="container" id="searchBoxContainer">
+  <br />
+	<div class="row justify-content-left">
+    <div class="col-12 col-md-10 col-lg-8">
+      <form class="card card-sm" action="{% url 'frontend:search' %}">
+        <div class="card-body row no-gutters align-items-center">
+          <div class="col-auto">
+            <i class="fas fa-search h4 text-body"></i>
           </div>
-        {% else %}
-          <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-secondary active">
-              <input type="radio" name="sort" value=false checked> Default Sort
-            </label>
-            <label class="btn btn-secondary">
-              <input type="radio" name="sort" value=true> Frequency Sort
-            </label>
+          <div class="col">
+            {% if query %}
+              <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search for furniture" name="query" value="{{query}}">
+            {% else %}
+              <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search for furniture" name="query" value="">
+            {% endif %}
           </div>
-        {% endif %}
-        <input type="hidden" name="query" value="{{query}}">
-        <br />
-        <button type="submit" class="btn btn-success"> Sort </button>
+          <div class="col-auto">
+            <button class="btn btn-lg btn-success" type="submit">Search</button>
+          </div>
+        </div>
       </form>
     </div>
-    <br />
-    <div class="row">
-      <ol>
-        {% for item in results %}
-        <div class="card">
-          <div class="card-header">
-            <h5 class="card-title">{{ item.name }}</h5>
-            <p class="card-text">Seller ID: {{ item.seller_id }}</p>
-          </div>
-          <div class="card-body">
-            <p class="card-text">${{ item.price }}</p>
-            <p class="card-text">{{ item.description }}</p>
-            <a
-              href="{% url 'frontend:item_details' item.id %}"
-              class="btn btn-primary"
-              >Item Details</a
-            >
-          </div>
-          <div class="card-footer text-muted">Posted: {{ item.timestamp }}</div>
-        </div>
-        <br />
-        {% endfor %}
-      </ol>
-      {% if not results %}
-        <h5>No results found...</h5>
-      {% endif %}
-    </div>
-    <br />
-    <div class="row">
-      {% if ERROR %}
-        <div class="alert alert-danger" role="alert">
-          {{ERROR}}
-        </div>
-      {% endif %}
-    </div>
   </div>
-</body>
+</div>
+
+<div class="container" id="sortButtonsContainer">
+  <div class="row">
+    <form action="{% url 'frontend:search' %}">
+      {% if sort %}
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-secondary">
+            <input type="radio" name="sort" value=false> Default Sort
+          </label>
+          <label class="btn btn-secondary active">
+            <input type="radio" name="sort" value=true checked> Frequency Sort
+          </label>
+        </div>
+      {% else %}
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-secondary active">
+            <input type="radio" name="sort" value=false checked> Default Sort
+          </label>
+          <label class="btn btn-secondary">
+            <input type="radio" name="sort" value=true> Frequency Sort
+          </label>
+        </div>
+      {% endif %}
+      <input type="hidden" name="query" value="{{query}}">
+      <br />
+      <button type="submit" class="btn btn-success"> Sort </button>
+    </form>
+  </div>
+</div>
+
+<div class="container" id="searchResultsContainer">
+  <br />
+  <div class="row">
+    <ol>
+      {% for item in results %}
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">{{ item.name }}</h5>
+          <p class="card-text">Seller ID: {{ item.seller_id }}</p>
+        </div>
+        <div class="card-body">
+          <p class="card-text">${{ item.price }}</p>
+          <p class="card-text">{{ item.description }}</p>
+          <a
+            href="{% url 'frontend:item_details' item.id %}"
+            class="btn btn-primary"
+            >Item Details</a
+          >
+        </div>
+        <div class="card-footer text-muted">Posted: {{ item.timestamp }}</div>
+      </div>
+      <br />
+      {% endfor %}
+    </ol>
+    {% if not results %}
+      <h5>No results found...</h5>
+    {% endif %}
+  </div>
+  <br />
+  <div class="row">
+    {% if ERROR %}
+      <div class="alert alert-danger" role="alert">
+        {{ERROR}}
+      </div>
+    {% endif %}
+  </div>
+</div>
 
 {% endblock %}
