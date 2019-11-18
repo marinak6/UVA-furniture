@@ -46,7 +46,7 @@ services:
       - "8003:8000"
     volumes:
       - ./web:/app
-    command: "mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
+    command: bash -c "pip install redis && mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
 
   kafka:
     image: spotify/kafka
@@ -121,7 +121,8 @@ services:
       - service_mesh
     volumes:
       - ./app/selenium:/app
-    command: bash -c "pip install selenium==3.141.0 && python selenium_runner.py"
+    command: bash -c "sleep 10 && pip install selenium==3.141.0 && python selenium_runner.py"
+
 networks:
   backend:
   service_mesh:

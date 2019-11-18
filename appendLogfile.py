@@ -4,11 +4,12 @@ from elasticsearch import Elasticsearch
 import urllib.request
 import urllib.parse
 import json
-
+import time
 connected = False
 
 while(True):
     # Pull new messages from Kafka
+    time.sleep(60)
     if(connected == False):
         try:
             consumer2 = KafkaConsumer(
