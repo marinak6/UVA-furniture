@@ -17,7 +17,8 @@ before_install:
   - docker-compose up -d
   - docker network connect uva-furniture_backend mysql
   - docker ps
-  - docker logs -f microservices
+  - sleep 15
+  - docker exec -it microservices python manage.py test
 install:
   - echo "No dependencies"
 #   - sleep 600

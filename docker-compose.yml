@@ -12,7 +12,7 @@ services:
     networks:
       - backend
       - service_mesh
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py loaddata fixtures/db.json && python manage.py test && mod_wsgi-express start-server --working-directory . --reload-on-changes ./microservices/wsgi.py"
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py loaddata fixtures/db.json && mod_wsgi-express start-server --working-directory . --reload-on-changes ./microservices/wsgi.py"
 
   exp:
     image: tp33/django
