@@ -35,7 +35,18 @@ services:
       - "8000:8000"
     volumes:
       - ./web:/app
-    command: "mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
+    command: bash -c "pip install redis && mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
+
+  web2:
+    image: tp33/django
+    container_name: web2
+    networks:
+      - public
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./web:/app
+    command: bash -c "pip install redis && mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
 
   kafka:
     image: spotify/kafka
@@ -72,6 +83,45 @@ services:
       - es
     command: bash -c "python searchIndexer.py & python appendLogfile.py & python parseLogfile.py"
     restart: on-failure
+
+  redis:
+    image: redis
+    container_name: redis
+    networks:
+      - public
+    ports:
+      - "6379:6379"
+
+  haproxy:
+    image: haproxy
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - public
+    depends_on:
+      - web
+      - web2
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+
+  selenium-chrome:
+    image: selenium/standalone-chrome
+    container_name: selenium-chrome
+    networks:
+      - service_mesh
+      - public
+    ports:
+      - "4444:4444"
+
+  selenium-test:
+    image: tp33/django
+    container_name: selenium-test
+    networks:
+      - service_mesh
+    volumes:
+      - ./app/selenium:/app
+    command: bash -c "sleep 10 && pip install selenium==3.141.0 && python selenium_runner.py"
 
 networks:
   backend:

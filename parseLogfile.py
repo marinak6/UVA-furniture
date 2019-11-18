@@ -12,7 +12,8 @@ while not es_connected:
         es_connected = True
 while(True):
     # Pull new messages from Kafka
-    time.sleep(5)
+    time.sleep(600)
+    es.ping()
     with open("logfile.txt", 'r') as f:
         get_all = f.readlines()
     with open("logfile.txt", 'w') as f:
