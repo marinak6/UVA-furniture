@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, render_to_response, get_object_or_404
 from django.urls import reverse
 import urllib.request
@@ -6,6 +6,16 @@ import urllib.parse
 import json
 
 from .forms import (CreateListingForm, CreateRegisterForm)
+from datetime import timedelta
+import redis
+redis_connected = False
+
+while(not redis_connected):
+    try:
+        r = redis.Redis(host='redis', port=6379, db=0)
+        redis_connected = True
+    except:
+        pass
 
 
 def logged_in_render(request, template, args):
@@ -23,25 +33,36 @@ def logged_in_render(request, template, args):
 
 
 def home(request):
-    req = urllib.request.Request('http://exp:8000/api/v1/')
-    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-    resp = json.loads(resp_json)
+    if r.exists("home.html") == 1:
+        return HttpResponse(r.get("home.html"))
+    else:
+        req = urllib.request.Request('http://exp:8000/api/v1/')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        response_obj = logged_in_render(
+            request, 'home.html', {'resp': resp["Res"]})
+        dump = response_obj.serialize()
+        dump = dump[44:]  # Delete extraneous content
+        r.set('home.html', dump)
+        r.expire("home.html", timedelta(minutes=5))
+        return response_obj
 
-    return logged_in_render(request, 'home.html', {'resp': resp["Res"]})
-    
 
 def search(request):
     sort = request.GET.get('sort')
     query = request.GET.get('query')
-    query_encoded = urllib.parse.urlencode({'query': query, 'sort': sort}).encode('utf-8')
+    query_encoded = urllib.parse.urlencode(
+        {'query': query, 'sort': sort}).encode('utf-8')
     api_url = 'http://exp:8000/api/v1/search/'
-    api_request = urllib.request.Request(api_url, data=query_encoded, method='POST')
+    api_request = urllib.request.Request(
+        api_url, data=query_encoded, method='POST')
     response = urllib.request.urlopen(api_request).read()
     response_decoded = json.loads(response.decode('utf-8'))
     results = []
     if 'listings' in response_decoded:
         for listing in response_decoded['listings']:
-            results.append(listing['_source']) # _source is where model fields are stored    
+            # _source is where model fields are stored
+            results.append(listing['_source'])
     context = {'query': query, 'results': results}
     if 'ERROR' in response_decoded:
         context['ERROR'] = response_decoded['ERROR']

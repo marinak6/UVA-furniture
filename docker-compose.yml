@@ -35,7 +35,7 @@ services:
       - "8000:8000"
     volumes:
       - ./web:/app
-    command: "mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
+    command: bash -c "pip install redis && mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
 
   kafka:
     image: spotify/kafka
@@ -59,19 +59,27 @@ services:
     ports:
       - "9200:9200"
 
-  batch:
-    image: tp33/django
-    container_name: batch
-    volumes:
-      - ./:/app
+  # batch:
+  #   image: tp33/django
+  #   container_name: batch
+  #   volumes:
+  #     - ./:/app
+  #   networks:
+  #     - batch_network
+  #     - service_mesh
+  #   depends_on:
+  #     - kafka
+  #     - es
+  #   command: bash -c "python searchIndexer.py & python appendLogfile.py & python parseLogfile.py"
+  #   restart: on-failure
+
+  redis:
+    image: redis
+    container_name: redis
     networks:
-      - batch_network
-      - service_mesh
-    depends_on:
-      - kafka
-      - es
-    command: bash -c "python searchIndexer.py & python appendLogfile.py & python parseLogfile.py"
-    restart: on-failure
+      - public
+    ports:
+      - "6379:6379"
 
 networks:
   backend:
