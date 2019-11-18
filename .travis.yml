@@ -18,5 +18,5 @@ install:
 #   - sleep 600
 script:
   - sleep 300
-  - docker exec -it microservices python manage.py test
+  # - docker exec -it microservices python manage.py test
   # - echo "No tests"
