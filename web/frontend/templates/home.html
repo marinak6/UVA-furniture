@@ -1,51 +1,40 @@
 {% extends 'base.html' %} {% block content %}
 
-<!-- Showcase -->
-<header id="showcase">
-  <div class="showcase-content">
-    <div class="text">
-      <h1 class="l1-heading">
-        UVA Furniture
-      </h1>
-      <p class="lead">
-        Explore | Buy | Sell
-      </p>
-    </div>
-  </div>
-</header>
-<section class="newest_items">
-  <h3>Newest Furnitures</h3>
-
-  <div class="items">
-    <div class="item">
-      <a href="{% url 'frontend:item_details' resp.0.id %}">
-        <img src="../static/img/stock.jpeg" alt="Stock" />
-      </a>
-      <h3>{{ resp.0.name }}</h3>
-      <p>
-        {{ resp.0.description }}
-      </p>
-    </div>
-    <div class="item">
-      <a href="{% url 'frontend:item_details' resp.1.id %}">
-        <img src="../static/img/stock.jpeg" alt="Stock" />
-      </a>
-      <h3>{{ resp.1.name }}</h3>
-      <p>
-        {{ resp.1.description }}
-      </p>
-    </div>
-    <div class="item">
-      <a href="{% url 'frontend:item_details' resp.2.id %}">
-        <img src="../static/img/stock.jpeg" alt="Stock" />
-      </a>
-      <h3>{{ resp.2.name }}</h3>
-      <p>
-        {{ resp.2.description }}
-      </p>
-    </div>
+<section class="jumbotron text-center" style="background-image: url(../static/img/homePage.jpeg); background-size: cover; background-repeat: no-repeat;">
+  <div class="container">
+    <h1 class="jumbotron-heading"><b>UVA Furniture</b></h1>
+    <p class="lead text-muted">A site where University of Virginia students can buy and sell their old furniture.</p>
+    <p>
+      <a href="{% url 'frontend:create_listing' %}" class="btn btn-primary my-2">Sell</a>
+      <a href="{% url 'frontend:search' %}" class="btn btn-secondary my-2">Search for furniture!</a>
+    </p>
   </div>
 </section>
 
-<!-- Newest Items -->
+<div class="album py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      
+      {% for listing in resp %}
+      <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+          <img class="card-img-top" src="../static/img/stock.jpeg" alt="Stock">
+          <div class="card-body">
+            <h3 class="card-text">{{ listing.name }}</h3>
+            <p> ${{ listing.price }} </p>
+            <p> {{ listing.description }} </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" onclick="window.location.href='{% url 'frontend:item_details' listing.id %}'" class="btn btn-sm btn-outline-secondary">View</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      
+    </div>
+  </div>
+</div>
+  
 {% endblock %}

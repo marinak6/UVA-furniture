@@ -341,7 +341,7 @@ def delete_furniture(request, id):
 @csrf_exempt
 def newest_items(request):
 
-    furnitures = Furniture.objects.order_by('-timestamp')[:3]
+    furnitures = Furniture.objects.order_by('-timestamp')[:10]
     res = []
     for furniture in furnitures:
 
