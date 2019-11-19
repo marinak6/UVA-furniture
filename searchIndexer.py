@@ -29,7 +29,6 @@ for item in listings:
 
 while(True):
     # Pull new messages from Kafka
-    time.sleep(300)
     if(connected == False):
         try:
             consumer = KafkaConsumer(
