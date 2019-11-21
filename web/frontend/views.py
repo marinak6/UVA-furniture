@@ -8,14 +8,6 @@ import json
 from .forms import (CreateListingForm, CreateRegisterForm)
 from datetime import timedelta
 import redis
-redis_connected = False
-
-while(not redis_connected):
-    try:
-        r = redis.Redis(host='redis', port=6379, db=0)
-        redis_connected = True
-    except:
-        pass
 
 
 def logged_in_render(request, template, args):
@@ -33,25 +25,33 @@ def logged_in_render(request, template, args):
 
 
 def home(request):
-    if r.exists("home.html") == 1:
-        return HttpResponse(r.get("home.html"))
+    try:
+        r = redis.Redis(host='redis', port=6379, db=0):
+        redis_connected = True
+    except:
+        redis_connected = False
+
+    if redis_connected:
+        if r.exists("home.html") == 1:
+            return HttpResponse(r.get("home.html"))
+        else:
+            req = urllib.request.Request('http://exp:8000/api/v1/')
+            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            resp = json.loads(resp_json)
+            response_obj = logged_in_render(
+                request, 'home.html', {'resp': resp["Res"]})
+            dump = response_obj.serialize()
+            dump = dump[44:]  # Delete extraneous content
+            r.set('home.html', dump)
+            r.expire("home.html", timedelta(minutes=5))
+            return response_obj
     else:
         req = urllib.request.Request('http://exp:8000/api/v1/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
         response_obj = logged_in_render(
             request, 'home.html', {'resp': resp["Res"]})
-        dump = response_obj.serialize()
-        dump = dump[44:]  # Delete extraneous content
-        r.set('home.html', dump)
-        r.expire("home.html", timedelta(minutes=5))
         return response_obj
-    # req = urllib.request.Request('http://exp:8000/api/v1/')
-    # resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-    # resp = json.loads(resp_json)
-    # response_obj = logged_in_render(
-    #     request, 'home.html', {'resp': resp["Res"]})
-    # return response_obj
 
 
 def search(request):

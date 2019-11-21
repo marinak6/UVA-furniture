@@ -8,19 +8,19 @@ from selenium.webdriver.common.by import By
 
 class TestSuite(unittest.TestCase):
     def setUp(self):
-        connected = False
-        while(not connected):
-            try:
-                self.driver = webdriver.Remote(
-                    command_executor='http://selenium-chrome:4444/wd/hub',
-                    desired_capabilities=DesiredCapabilities.CHROME)
-                connected = True
-            except:
-                pass
+        # connected = False
+        # while(not connected):
+        #     try:
+        #         self.driver = webdriver.Remote(
+        #             command_executor='http://selenium-chrome:4444/wd/hub',
+        #             desired_capabilities=DesiredCapabilities.CHROME)
+        #         connected = True
+        #     except:
+        #         pass
         # time.sleep(10)
-        # self.driver = webdriver.Remote(
-        #     command_executor='http://selenium-chrome:4444/wd/hub',
-        #     desired_capabilities=DesiredCapabilities.CHROME)
+        self.driver = webdriver.Remote(
+            command_executor='http://selenium-chrome:4444/wd/hub',
+            desired_capabilities=DesiredCapabilities.CHROME)
 
     def test_home_page(self):
         self.home_page = "http://web:8000"
@@ -58,7 +58,7 @@ class TestSuite(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-    tester = TestSuite()
-    tester.setUp()
-    tester.test_home_page()
-    tester.test_register()
+    # tester = TestSuite()
+    # tester.setUp()
+    # tester.test_home_page()
+    # tester.test_register()
