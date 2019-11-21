@@ -23,6 +23,7 @@ before_install:
   - sleep 210
   - docker ps
   - docker start microservices
+  - docker ps
   - sleep 20
   - docker exec -it microservices python manage.py test
   - sleep 20
