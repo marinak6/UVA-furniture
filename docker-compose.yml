@@ -121,8 +121,8 @@ services:
       - service_mesh
     volumes:
       - ./app/selenium:/app
-    command: bash -c "sleep 10 && pip install selenium==3.141.0"
-    # command: bash -c "sleep 10 && pip install selenium==3.141.0 && python selenium_runner.py"
+    command: bash -c "sleep 10 && pip install selenium==3.141.0 && python selenium_runner.py"
+    # command: bash -c "sleep 10 && pip install selenium==3.141.0"
 
 networks:
   backend:
