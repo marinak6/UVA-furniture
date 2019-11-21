@@ -20,13 +20,13 @@ before_install:
   - docker-compose up -d
   - docker network connect uva-furniture_backend mysql
   - docker ps
-  - sleep 210
+  - sleep 120
   - docker ps
   - docker start microservices
   - docker ps
   - sleep 20
   - docker exec -it microservices python manage.py test
-  - sleep 20
+  - docker start selenium-test
   - docker exec -it selenium-test python selenium_runner.py
 install:
   - echo "No dependencies"
