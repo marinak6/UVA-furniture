@@ -24,10 +24,13 @@ while(True):
                 try:
                     es.update(index='listing_index', doc_type='listing',
                               id=item_id, body={'script': 'ctx._source.visits += 1'})
+                    split_line[-1] = "1\n"
                 except:
-                    es.update(index='listing_index', doc_type='listing', id=item_id, body={
-                        'script': 'ctx._source.visits = 1'})
-                split_line[-1] = "1\n"
+                    try:
+                        es.update(index='listing_index', doc_type='listing', id=item_id, body={
+                            'script': 'ctx._source.visits = 1'})
+                    except:
+                        pass
                 f.writelines(",".join(split_line))
             else:
                 f.writelines(",".join(split_line))

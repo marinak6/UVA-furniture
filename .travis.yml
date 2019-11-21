@@ -19,7 +19,8 @@ before_install:
   - docker start mysql
   - docker-compose up -d
   - docker network connect uva-furniture_backend mysql
-  - sleep 150
+  - docker ps
+  - sleep 180
   - docker ps
   - docker exec -it microservices python manage.py test
   - sleep 20
