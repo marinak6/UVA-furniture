@@ -26,7 +26,7 @@ def logged_in_render(request, template, args):
 
 def home(request):
     try:
-        r = redis.Redis(host='redis', port=6379, db=0):
+        r = redis.Redis(host='redis', port=6379, db=0)
         redis_connected = True
     except:
         redis_connected = False
