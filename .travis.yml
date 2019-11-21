@@ -14,12 +14,12 @@ before_install:
   - mkdir -p ~/cs4501/db
   - docker pull mysql:5.7.23
   - docker run --name mysql -d -e MYSQL_ROOT_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql mysql:5.7.23
-  - sleep 60
+  - sleep 120
   - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.23 mysql -uroot -p'$3cureUS' -h db -e "create user 'www'@'%' identified by '\$3cureUS'; create database cs4501 character set utf8; grant all on cs4501.* to 'www'@'%'; grant all on test_cs4501.* to 'www'@'%';"
   - docker start mysql
-  - docker network connect uva-furniture_backend mysql
   - docker-compose up -d
-  - sleep 60
+  - docker network connect uva-furniture_backend mysql
+  - sleep 120
   - docker ps
   - docker exec -it microservices python manage.py test
 install:
