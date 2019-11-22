@@ -10,7 +10,8 @@ class TestSuite(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Remote(
             command_executor='http://selenium-chrome:4444/wd/hub', desired_capabilities=DesiredCapabilities.CHROME)
-        self.driver.switch_to.default_content()
+        self.driver.implicitly_wait(10)
+        self.driver.set_page_load_timeout(15)
 
     def test_home_page(self):
         self.home_page = "http://web:8000"
