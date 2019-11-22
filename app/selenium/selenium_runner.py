@@ -8,16 +8,6 @@ from selenium.webdriver.common.by import By
 
 class TestSuite(unittest.TestCase):
     def setUp(self):
-        # connected = False
-        # while(not connected):
-        #     try:
-        #         self.driver = webdriver.Remote(
-        #             command_executor='http://selenium-chrome:4444/wd/hub',
-        #             desired_capabilities=DesiredCapabilities.CHROME)
-        #         connected = True
-        #     except:
-        #         pass
-        # time.sleep(10)
         self.driver = webdriver.Remote(
             command_executor='http://selenium-chrome:4444/wd/hub', desired_capabilities=DesiredCapabilities.CHROME)
         self.driver.switch_to.default_content()
@@ -48,17 +38,10 @@ class TestSuite(unittest.TestCase):
         self.driver.find_element_by_id("id_email").send_keys("test@test.com")
         self.driver.find_element_by_xpath("//*[@value='Submit']").click()
         time.sleep(5)
-        # element = self.driver.find_element_by_class_name("wv-heading--title")
-        # self.assertIsNotNone(element)
 
     def tearDown(self):
         self.driver.close()
 
 
 if __name__ == "__main__":
-    # unittest.main()
-    tester = TestSuite()
-    tester.setUp()
-    tester.test_home_page()
-    tester.tearDown()
-    # tester.test_register()
+    unittest.main()

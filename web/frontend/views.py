@@ -28,6 +28,7 @@ def home(request):
     try:
         r = redis.Redis(host='redis', port=6379, db=0)
         redis_connected = True
+        r.exists("home.html")
     except:
         redis_connected = False
 
