@@ -15,8 +15,9 @@ class TestSuite(unittest.TestCase):
     def test_home_page(self):
         self.home_page = "http://web:8000"
         self.driver.get(self.home_page)
-        time.sleep(10)
+        time.sleep(5)
         # elem = self.driver.find_element_by_name("q")
+        print(self.driver.title)
         assert "UVA Furniture" in self.driver.title
 
     def test_register(self):
