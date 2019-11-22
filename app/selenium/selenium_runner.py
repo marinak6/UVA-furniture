@@ -19,15 +19,14 @@ class TestSuite(unittest.TestCase):
         #         pass
         # time.sleep(10)
         self.driver = webdriver.Remote(
-            command_executor='http://selenium-chrome:4444/wd/hub',
-            desired_capabilities=DesiredCapabilities.CHROME)
+            command_executor='http://selenium-chrome:4444/wd/hub', desired_capabilities=DesiredCapabilities.CHROME)
+        self.driver.switch_to.default_content()
 
     def test_home_page(self):
         self.home_page = "http://web:8000"
         self.driver.get(self.home_page)
         time.sleep(10)
         # elem = self.driver.find_element_by_name("q")
-        self.assertIn("UVA Furniture", self.driver.title)
         assert "UVA Furniture" in self.driver.title
 
     def test_register(self):
@@ -57,8 +56,9 @@ class TestSuite(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
-    # tester = TestSuite()
-    # tester.setUp()
-    # tester.test_home_page()
+    # unittest.main()
+    tester = TestSuite()
+    tester.setUp()
+    tester.test_home_page()
+    tester.tearDown()
     # tester.test_register()
