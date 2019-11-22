@@ -14,7 +14,7 @@ class TestSuite(unittest.TestCase):
         self.driver.set_page_load_timeout(15)
 
     def test_home_page(self):
-        self.home_page = "http://web:8000"
+        self.home_page = "localhost"
         self.driver.get(self.home_page)
         time.sleep(10)
         # elem = self.driver.find_element_by_name("q")
@@ -23,7 +23,7 @@ class TestSuite(unittest.TestCase):
 
     def test_register(self):
 
-        self.home_page = "http://web:8000"
+        self.home_page = "localhost"
         self.driver.get(self.home_page)
         time.sleep(10)
         self.driver.find_element_by_xpath("//*[text() = 'Register']").click()
