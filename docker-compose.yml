@@ -37,16 +37,16 @@ services:
       - ./web:/app
     command: bash -c "pip install redis && mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
 
-  # web2:
-  #   image: tp33/django
-  #   container_name: web2
-  #   networks:
-  #     - public
-  #   ports:
-  #     - "8003:8000"
-  #   volumes:
-  #     - ./web:/app
-  #   command: bash -c "pip install redis && mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
+  web2:
+    image: tp33/django
+    container_name: web2
+    networks:
+      - public
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./web:/app
+    command: bash -c "pip install redis && mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
 
   kafka:
     image: spotify/kafka
