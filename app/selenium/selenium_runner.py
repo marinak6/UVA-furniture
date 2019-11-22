@@ -15,7 +15,7 @@ class TestSuite(unittest.TestCase):
     def test_home_page(self):
         self.home_page = "http://web:8000"
         self.driver.get(self.home_page)
-        time.sleep(5)
+        time.sleep(10)
         # elem = self.driver.find_element_by_name("q")
         print(self.driver.title)
         assert "UVA Furniture" in self.driver.title
@@ -24,7 +24,7 @@ class TestSuite(unittest.TestCase):
 
         self.home_page = "http://web:8000"
         self.driver.get(self.home_page)
-        time.sleep(5)
+        time.sleep(10)
         self.driver.find_element_by_xpath("//*[text() = 'Register']").click()
         time.sleep(5)
         # self.driver.find_element(
