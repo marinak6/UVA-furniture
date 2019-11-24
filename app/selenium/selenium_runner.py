@@ -24,28 +24,29 @@ class TestSuite(unittest.TestCase):
         assert "UVA Furniture" in self.driver.title
 
     def test_register(self):
-
         self.home_page = "http://web:8000"
         self.driver.get(self.home_page)
-        time.sleep(10)
-        print(self.driver.find_element_by_id("register").get_attribute("href"))
         self.driver.find_element_by_id("register").click()
-        time.sleep(5)
-        print(self.driver.current_url)
-        # self.driver.find_element(
-        #     By.XPATH, '//text()[contains(.,"Get started with UVA Furniture by creating an account!")]')
-
-        # self.assertIsNotNone(element)
-        """
+        assert "http://web:8000/register" in self.driver.current_url
         self.driver.find_element_by_id(
             "id_first_name").send_keys("test_user_first")
+
         self.driver.find_element_by_id(
             "id_last_name").send_keys("test_user_last")
         self.driver.find_element_by_id("id_password").send_keys("password")
         self.driver.find_element_by_id("id_email").send_keys("test@test.com")
         self.driver.find_element_by_id("submitbtn").click()
-        time.sleep(5)
-        """
+        assert "http://web:8000/register" in self.driver.current_url
+
+    def login(self):
+        self.home_page = "http://web:8000"
+        self.driver.get(self.home_page)
+        self.driver.find_element_by_id("login").click()
+        assert "http://web:8000/login" in self.driver.current_url
+        self.driver.find_element_by_id("email").send_keys("testing@manual.com")
+        self.driver.find_element_by_id("login-input").send_keys("password")
+        self.driver.find_element_by_id("loginbtn").click()
+        assert "http://web:8000" in self.driver.current_url
 
     def tearDown(self):
         self.driver.close()
