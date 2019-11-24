@@ -8,13 +8,15 @@ from selenium.webdriver.common.by import By
 
 class TestSuite(unittest.TestCase):
     def setUp(self):
+        options = webdriver.ChromeOptions()
+        options.add_argument('headless')
+        options.add_argument('no-sandbox')
         self.driver = webdriver.Remote(
-            command_executor='http://selenium-chrome:4444/wd/hub', desired_capabilities=DesiredCapabilities.CHROME)
+            command_executor='http://selenium-chrome:4444/wd/hub', desired_capabilities=options.to_capabilities())
         self.driver.implicitly_wait(10)
-        self.driver.set_page_load_timeout(15)
 
     def test_home_page(self):
-        self.home_page = "0.0.0.0:80"
+        self.home_page = "http://web:8000"
         self.driver.get(self.home_page)
         time.sleep(10)
         # elem = self.driver.find_element_by_name("q")
@@ -23,23 +25,27 @@ class TestSuite(unittest.TestCase):
 
     def test_register(self):
 
-        self.home_page = "0.0.0.0:80"
+        self.home_page = "http://web:8000"
         self.driver.get(self.home_page)
         time.sleep(10)
-        self.driver.find_element_by_xpath("//*[text() = 'Register']").click()
+        print(self.driver.find_element_by_id("register").get_attribute("href"))
+        self.driver.find_element_by_id("register").click()
         time.sleep(5)
+        print(self.driver.current_url)
         # self.driver.find_element(
         #     By.XPATH, '//text()[contains(.,"Get started with UVA Furniture by creating an account!")]')
 
         # self.assertIsNotNone(element)
+        """
         self.driver.find_element_by_id(
             "id_first_name").send_keys("test_user_first")
         self.driver.find_element_by_id(
             "id_last_name").send_keys("test_user_last")
         self.driver.find_element_by_id("id_password").send_keys("password")
         self.driver.find_element_by_id("id_email").send_keys("test@test.com")
-        self.driver.find_element_by_xpath("//*[@value='Submit']").click()
+        self.driver.find_element_by_id("submitbtn").click()
         time.sleep(5)
+        """
 
     def tearDown(self):
         self.driver.close()
