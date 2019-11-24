@@ -8,33 +8,24 @@ from selenium.webdriver.common.by import By
 
 class TestSuite(unittest.TestCase):
     def setUp(self):
-        # connected = False
-        # while(not connected):
-        #     try:
-        #         self.driver = webdriver.Remote(
-        #             command_executor='http://selenium-chrome:4444/wd/hub',
-        #             desired_capabilities=DesiredCapabilities.CHROME)
-        #         connected = True
-        #     except:
-        #         pass
-        # time.sleep(10)
         self.driver = webdriver.Remote(
-            command_executor='http://selenium-chrome:4444/wd/hub',
-            desired_capabilities=DesiredCapabilities.CHROME)
+            command_executor='http://selenium-chrome:4444/wd/hub', desired_capabilities=DesiredCapabilities.CHROME)
+        self.driver.implicitly_wait(10)
+        self.driver.set_page_load_timeout(15)
 
     def test_home_page(self):
-        self.home_page = "http://web:8000"
+        self.home_page = "0.0.0.0:80"
         self.driver.get(self.home_page)
         time.sleep(10)
         # elem = self.driver.find_element_by_name("q")
-        self.assertIn("UVA Furniture", self.driver.title)
+        print(self.driver.title)
         assert "UVA Furniture" in self.driver.title
 
     def test_register(self):
 
-        self.home_page = "http://web:8000"
+        self.home_page = "0.0.0.0:80"
         self.driver.get(self.home_page)
-        time.sleep(5)
+        time.sleep(10)
         self.driver.find_element_by_xpath("//*[text() = 'Register']").click()
         time.sleep(5)
         # self.driver.find_element(
@@ -49,8 +40,6 @@ class TestSuite(unittest.TestCase):
         self.driver.find_element_by_id("id_email").send_keys("test@test.com")
         self.driver.find_element_by_xpath("//*[@value='Submit']").click()
         time.sleep(5)
-        # element = self.driver.find_element_by_class_name("wv-heading--title")
-        # self.assertIsNotNone(element)
 
     def tearDown(self):
         self.driver.close()
@@ -58,7 +47,3 @@ class TestSuite(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-    # tester = TestSuite()
-    # tester.setUp()
-    # tester.test_home_page()
-    # tester.test_register()

@@ -28,20 +28,20 @@ def home(request):
     try:
         r = redis.Redis(host='redis', port=6379, db=0)
         redis_connected = True
+        r.exists("home.html")
     except:
         redis_connected = False
 
     if redis_connected:
         if r.exists("home.html") == 1:
-            return HttpResponse(r.get("home.html"))
+            return logged_in_render(request, 'home.html', json.loads(r.get("home.html").decode('utf-8')))
         else:
             req = urllib.request.Request('http://exp:8000/api/v1/')
             resp_json = urllib.request.urlopen(req).read().decode('utf-8')
             resp = json.loads(resp_json)
             response_obj = logged_in_render(
                 request, 'home.html', {'resp': resp["Res"]})
-            dump = response_obj.serialize()
-            dump = dump[44:]  # Delete extraneous content
+            dump = json.dumps({'resp': resp["Res"]})
             r.set('home.html', dump)
             r.expire("home.html", timedelta(minutes=5))
             return response_obj

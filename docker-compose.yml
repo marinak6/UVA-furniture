@@ -31,8 +31,6 @@ services:
     container_name: web
     networks:
       - public
-    depends_on:
-      - es
     ports:
       - "8000:8000"
     volumes:
@@ -121,13 +119,9 @@ services:
     container_name: selenium-test
     networks:
       - service_mesh
-    depends_on:
-      - selenium-chrome
-      - web
     volumes:
       - ./app/selenium:/app
-    command: bash -c "sleep 10 && pip install selenium==3.141.0 && python selenium_runner.py"
-    # command: bash -c "sleep 10 && pip install selenium==3.141.0"
+    command: bash -c "sleep 20 && pip install selenium==3.141.0 && python selenium_runner.py"
 
 networks:
   backend:
