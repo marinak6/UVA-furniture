@@ -11,13 +11,13 @@
           </div>
           <div class="col">
             {% if query %}
-              <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search for furniture" name="query" value="{{query}}">
+              <input id="search_input" class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search for furniture" name="query" value="{{query}}">
             {% else %}
-              <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search for furniture" name="query" value="">
+              <input id="search_input" class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search for furniture" name="query" value="">
             {% endif %}
           </div>
           <div class="col-auto">
-            <button class="btn btn-lg btn-success" type="submit">Search</button>
+            <button id="searchbtn" class="btn btn-lg btn-success" type="submit">Search</button>
           </div>
         </div>
       </form>
