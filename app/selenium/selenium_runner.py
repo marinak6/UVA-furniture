@@ -49,6 +49,9 @@ class TestSuite(unittest.TestCase):
         print(self.driver.current_url)
         assert "http://web:8000" in self.driver.current_url
 
+    def tearDown(self):
+        self.driver.close()
+
     def test_create_listing(self):
         self.home_page = "http://web:8000"
         self.driver.get(self.home_page)
@@ -76,9 +79,6 @@ class TestSuite(unittest.TestCase):
         self.driver.find_element_by_id("searchbtn").click()
         print(self.driver.current_url)
         assert "The coolest plant you can ever buy" in self.driver.page_source
-
-    def tearDown(self):
-        self.driver.close()
 
 
 if __name__ == "__main__":

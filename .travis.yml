@@ -10,7 +10,7 @@ services:
   - mysql
 env:
   - DOCKER_COMPOSE_VERSION=1.22.0
-before_install:
+before_script:
   - docker pull tp33/django
   - mkdir -p ~/cs4501/db
   - docker pull mysql:5.7.23
@@ -25,15 +25,16 @@ before_install:
   - docker ps
   - docker start microservices
   - docker ps
-  - sleep 20
-  - docker exec -it microservices python manage.py test
+  # - sleep 20
+  # - docker exec -it microservices python manage.py test
   # - docker start selenium-test
   # - docker exec -it selenium-test python selenium_runner.py
-  - docker logs selenium-test
 install:
   - echo "No dependencies"
 #   - sleep 600
 script:
   - echo "script placeholder"
-  # - docker exec -it microservices python manage.py test
+  - docker exec -it microservices python manage.py test
+  - docker exec -it selenium-test python selenium_runner.py
+  - docker logs selenium-test
   # - echo "No tests"
