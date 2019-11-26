@@ -20,7 +20,7 @@ class TestSuite(unittest.TestCase):
         self.driver.get(self.home_page)
         time.sleep(10)
         # elem = self.driver.find_element_by_name("q")
-        print(self.driver.title)
+        print("test_homepage" + self.driver.title)
         assert "UVA Furniture" in self.driver.title
 
     def test_register(self):
@@ -35,7 +35,7 @@ class TestSuite(unittest.TestCase):
         self.driver.find_element_by_id("id_password").send_keys("password")
         self.driver.find_element_by_id("id_email").send_keys("test@test.com")
         self.driver.find_element_by_id("submitbtn").click()
-        print(self.driver.current_url)
+        print("test_register" + self.driver.current_url)
         assert "http://web:8000/register" in self.driver.current_url
 
     def test_login(self):
@@ -46,16 +46,14 @@ class TestSuite(unittest.TestCase):
         self.driver.find_element_by_id("email").send_keys("testing@test.com")
         self.driver.find_element_by_id("login-input").send_keys("password")
         self.driver.find_element_by_id("loginbtn").click()
-        print(self.driver.current_url)
+        print("test_login" + self.driver.current_url)
         assert "http://web:8000" in self.driver.current_url
-
-    def tearDown(self):
-        self.driver.close()
 
     def test_create_listing(self):
         self.home_page = "http://web:8000"
         self.driver.get(self.home_page)
         self.driver.find_element_by_id("sell").click()
+        print("test_create_listing" + self.driver.current_url)
         assert "http://web:8000/create_listing" in self.driver.current_url
         self.driver.find_element_by_id(
             "create_name").send_keys("test_furniture")
@@ -67,18 +65,22 @@ class TestSuite(unittest.TestCase):
             "create_description").send_keys("This is a test!")
         self.driver.find_element_by_id(
             "create_submit").click()
-        print(self.driver.current_url)
+        print("test_create_listing" + self.driver.current_url)
         assert "http://web:8000/item" in self.driver.current_url
 
     def test_search(self):
         self.home_page = "http://web:8000"
         self.driver.get(self.home_page)
         self.driver.find_element_by_id("home_search").click()
+        print("test_search" + self.driver.current_url)
         assert "http://web:8000/search" in self.driver.current_url
         self.driver.find_element_by_id("search_input").send_keys("plant")
         self.driver.find_element_by_id("searchbtn").click()
         print(self.driver.current_url)
         assert "The coolest plant you can ever buy" in self.driver.page_source
+
+    def tearDown(self):
+        self.driver.close()
 
 
 if __name__ == "__main__":
