@@ -21,9 +21,9 @@ before_script:
   - docker-compose up -d
   - docker network connect uva-furniture_backend mysql
   - docker ps
-  # - sleep 20
-  # - docker exec -it microservices python manage.py test
-  # - docker start selenium-test
+  - sleep 20
+  - docker exec -it microservices python manage.py test
+  - docker start selenium-test
   # - docker exec -it selenium-test python selenium_runner.py
 install:
   - echo "No dependencies"
