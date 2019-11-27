@@ -108,7 +108,7 @@ def login(request):
     auth_user = request.COOKIES.get('authenticator')
     if auth_user:
         return HttpResponseRedirect(reverse('frontend:index'))
-    if(request.method == "POST"):
+    if request.method == "POST":
         received_login_data = request.POST
         login_info = {
             "email": received_login_data['email'],
@@ -116,22 +116,24 @@ def login(request):
         }
         try:
             exp_service_url = 'http://exp:8000/api/v1/login'
-            encoded_login_data = urllib.parse.urlencode(
-                received_login_data).encode('utf-8')
-            request2 = urllib.request.Request(
-                exp_service_url, data=encoded_login_data, method='POST')
-            json_respsonse = urllib.request.urlopen(
-                request2).read().decode('utf-8')
+            encoded_login_data = urllib.parse.urlencode(received_login_data).encode('utf-8')
+            request2 = urllib.request.Request(exp_service_url, data=encoded_login_data, method='POST')
+            json_respsonse = urllib.request.urlopen(request2).read().decode('utf-8')
             response = json.loads(json_respsonse)
-            if "error" in response:
-                args = {'error': "Incorrect credentials"}
+            if 'error' in response:
+                args = {'error': response['error']}
                 return render(request, "login.html", args)
-            # we can now log them in
+                
+            # We can now login the User
             authenticator = response['authenticator']
+            
+            # Send the User to the page they attempted to access
             if request.GET.get('next'):
                 response = redirect(request.GET.get('next'))
             else:
                 response = HttpResponseRedirect(reverse('frontend:index'))
+                
+            # A User's cookie is how we authenticate them
             response.set_cookie('authenticator', authenticator)
             return response
         except Exception as error:

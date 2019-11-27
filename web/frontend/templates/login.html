@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block content %} {% load static %} <link rel="stylesheet" href="{% static 'css/form_style.css' %}" /> 
+{% extends 'base.html' %} {% block content %} {% load static %}
 {% if next_link %}
 
 <form action="/login/?next={{ next_link }}" method="post">
