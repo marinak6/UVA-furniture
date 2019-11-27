@@ -108,6 +108,8 @@ def login(request):
     auth_user = request.COOKIES.get('authenticator')
     if auth_user:
         return HttpResponseRedirect(reverse('frontend:index'))
+        
+    # User submitted the Login form
     if request.method == "POST":
         received_login_data = request.POST
         login_info = {
@@ -120,6 +122,8 @@ def login(request):
             request2 = urllib.request.Request(exp_service_url, data=encoded_login_data, method='POST')
             json_respsonse = urllib.request.urlopen(request2).read().decode('utf-8')
             response = json.loads(json_respsonse)
+            
+            # Something went wrong on the experience service level
             if 'error' in response:
                 args = {'error': response['error']}
                 return render(request, "login.html", args)
@@ -139,11 +143,12 @@ def login(request):
         except Exception as error:
             args = {'error': str(error)}
             return render(request, "login.html", args)
+    
+    # User clicked link to Login page
     else:
+        next_link = reverse("frontend:index")
         if request.GET.get('next'):
             next_link = request.GET.get('next')
-        else:
-            next_link = reverse("frontend:index")
         return render(request, 'login.html', {"next_link": next_link})
 
 
