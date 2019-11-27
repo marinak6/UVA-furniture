@@ -1,10 +1,7 @@
-{% extends 'base.html' %} {% block content %} {% load static %}
-{% if next_link %}
+{% extends 'base.html' %} {% block content %} 
 
 <form action="/login/?next={{ next_link }}" method="post">
-  {% else %}
-  <form method="post">
-    {% endif %} {% csrf_token %}
+  {% csrf_token %}
     <div class="login-form">
       <div class="form-group" style= "width:20%;">
         <div class="col-md-6 mx-auto">
@@ -55,4 +52,3 @@
   </form>
 
   {% endblock %}
-</form>
