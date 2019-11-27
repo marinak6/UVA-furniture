@@ -43,9 +43,13 @@
           Login
         </button>
         <br />
-        {% if error %}
-        {{ error }}
-        {% endif %}
+        <div class="row">
+          {% if error %}
+            <div class="alert alert-danger" role="alert">
+              {{error}}
+            </div>
+          {% endif %}
+        </div>
       </div>
     </div>
   </form>
