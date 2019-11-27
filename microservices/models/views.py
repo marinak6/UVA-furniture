@@ -41,9 +41,9 @@ def check_login(request):
                 else:
                     return JsonResponse({'error': 'password is wrong'})
             else:
-                return JsonResponse({'error': 'email is wrong'})
+                return JsonResponse({'error': 'no account with that email found'})
         except Exception as error:
-            return JsonResponse({"Microservices Login Error Message": str(error)})
+            return JsonResponse({'error': str(error)})
 
 
 @csrf_exempt

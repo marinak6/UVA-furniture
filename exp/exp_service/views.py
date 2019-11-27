@@ -30,7 +30,7 @@ def login(request):
             return JsonResponse(response)
 
         except Exception as error:
-            return JsonResponse({"Experience Service Register Error Message": str(error)})
+            return JsonResponse({'error': str(error)})
 
 
 @csrf_exempt
