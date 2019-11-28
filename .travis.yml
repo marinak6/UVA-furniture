@@ -10,16 +10,18 @@ services:
   - mysql
 env:
   - DOCKER_COMPOSE_VERSION=1.22.0
-before_script:
+before_install:
   - docker pull tp33/django
   - mkdir -p ~/cs4501/db
-  - docker pull mysql:5.7.23
-  - docker run --name mysql -d -e MYSQL_ROOT_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql mysql:5.7.23
+  - docker pull mysql:latest
+  - docker run --name mysql -d -e MYSQL_ROOT_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql mysql:latest
   - sleep 120
-  - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.23 mysql -uroot -p'$3cureUS' -h db -e "create user 'www'@'%' identified by '\$3cureUS'; create database cs4501 character set utf8; grant all on cs4501.* to 'www'@'%'; grant all on test_cs4501.* to 'www'@'%';"
+  - docker run -it --name mysql-cmdline --link mysql:db mysql:latest mysql -uroot -p'$3cureUS' -h db -e "create user 'www'@'%' identified by '\$3cureUS'; create database cs4501 character set utf8; grant all on cs4501.* to 'www'@'%'; grant all on test_cs4501.* to 'www'@'%';"
   - docker start mysql
-  - docker-compose up -d
+
+before_script:
   - docker network connect uva-furniture_backend mysql
+  - docker-compose up -d
   - docker ps
   - sleep 120
   - docker ps
