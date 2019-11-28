@@ -22,7 +22,7 @@ before_script:
   - docker network connect uva-furniture_backend mysql
   - docker ps
   - sleep 30
-  - docker stop selenium-tests
+  - docker stop selenium-test
   - sleep 150
   - docker ps
   - docker start microservices
