@@ -27,6 +27,7 @@ class TestSuite(unittest.TestCase):
         # elem = self.driver.find_element_by_name("q")
         print("test_homepage" + self.driver.title)
         assert "UVA Furniture" in self.driver.title
+        pass
 
     def test_b_register(self):
         self.home_page = "http://web:8000"
@@ -43,6 +44,7 @@ class TestSuite(unittest.TestCase):
         self.driver.find_element_by_id("submitbtn").click()
         print("test_register" + self.driver.current_url)
         assert "http://web:8000/login" in self.driver.current_url
+        pass
 
     def test_c_login(self):
         self.home_page = "http://web:8000"
@@ -55,6 +57,7 @@ class TestSuite(unittest.TestCase):
         self.driver.find_element_by_id("loginbtn").click()
         print("test_login" + self.driver.current_url)
         self.assertEqual("http://web:8000/", self.driver.current_url)
+        pass
 
     def test_d_create_listing(self):
         self.home_page = "http://web:8000"
@@ -80,6 +83,7 @@ class TestSuite(unittest.TestCase):
             "create_submit").click()
         print("test_create_listing" + self.driver.current_url)
         assert "http://web:8000/item" in self.driver.current_url
+        pass
 
     def test_e_search(self):
         self.home_page = "http://web:8000"
@@ -92,6 +96,7 @@ class TestSuite(unittest.TestCase):
         self.driver.find_element_by_id("searchbtn").click()
         print(self.driver.current_url)
         assert "This is a test!" in self.driver.page_source
+        pass
 
     def tearDown(self):
         self.driver.close()
