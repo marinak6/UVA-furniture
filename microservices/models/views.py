@@ -41,7 +41,7 @@ def check_login(request):
                 else:
                     return JsonResponse({'error': 'password is wrong'})
             else:
-                return JsonResponse({'error': 'no account with that email found'})
+                return JsonResponse({'error': 'no account with that email'})
         except Exception as error:
             return JsonResponse({'error': str(error)})
 
