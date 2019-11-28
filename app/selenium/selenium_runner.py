@@ -84,34 +84,13 @@ class TestSuite(unittest.TestCase):
     def test_e_search(self):
         self.home_page = "http://web:8000"
         self.driver.get(self.home_page)
-        self.driver.find_element_by_id("login").click()
-        assert "http://web:8000/login" in self.driver.current_url
-        self.driver.find_element_by_id(
-            "email").send_keys(self.EMAIL+"@test.com")
-        self.driver.find_element_by_id("login-input").send_keys("password")
-        self.driver.find_element_by_id("loginbtn").click()
-        self.driver.find_element_by_id("sell").click()
-        print("test_create_listing" + self.driver.current_url)
-        assert "http://web:8000/create_listing" in self.driver.current_url
-        self.driver.find_element_by_id(
-            "create_name").send_keys("test_furniture")
-        self.driver.find_element_by_id(
-            "create_price").send_keys("50")
-        self.driver.find_element_by_id(
-            "create_category").send_keys("tests")
-        self.driver.find_element_by_id(
-            "create_description").send_keys("This is a test!")
-        self.driver.find_element_by_id(
-            "create_submit").click()
-        print("test_create_listing" + self.driver.current_url)
-        assert "http://web:8000/item" in self.driver.current_url
-        self.driver.get(self.home_page)
         self.driver.find_element_by_id("home_search").click()
         print("test_search" + self.driver.current_url)
         assert "http://web:8000/search" in self.driver.current_url
         self.driver.find_element_by_id(
             "search_input").send_keys("test_furniture")
         self.driver.find_element_by_id("searchbtn").click()
+        time.sleep(20)
         print(self.driver.current_url)
         assert "This is a test!" in self.driver.page_source
 
