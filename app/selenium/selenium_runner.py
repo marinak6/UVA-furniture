@@ -90,7 +90,6 @@ class TestSuite(unittest.TestCase):
         self.driver.find_element_by_id(
             "search_input").send_keys("test_furniture")
         self.driver.find_element_by_id("searchbtn").click()
-        time.sleep(20)
         print(self.driver.current_url)
         assert "This is a test!" in self.driver.page_source
 
