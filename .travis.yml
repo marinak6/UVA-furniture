@@ -13,7 +13,7 @@ env:
 before_script:
   - docker pull tp33/django
   - mkdir -p ~/cs4501/db
-  - docker pull mysql:5.7.23
+  - docker pull mysql:latest
   - docker run --name mysql -d -e MYSQL_ROOT_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql mysql:5.7.23
   - sleep 120
   - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.23 mysql -uroot -p'$3cureUS' -h db -e "create user 'www'@'%' identified by '\$3cureUS'; create database cs4501 character set utf8; grant all on cs4501.* to 'www'@'%'; grant all on test_cs4501.* to 'www'@'%';"
@@ -26,7 +26,6 @@ before_script:
   - docker start microservices
   - docker ps
   # - sleep 20
-  # - docker exec -it microservices python manage.py test
   # - docker start selenium-test
   # - docker exec -it selenium-test python selenium_runner.py
 install:
