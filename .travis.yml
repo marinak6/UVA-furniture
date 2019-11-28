@@ -21,10 +21,9 @@ before_script:
   - docker-compose up -d
   - docker network connect uva-furniture_backend mysql
   - docker ps
-  - sleep 30
-  - docker stop selenium-test
   - sleep 150
   - docker ps
+  - docker stop selenium-test
   - docker start microservices
   - docker ps
   - sleep 20
