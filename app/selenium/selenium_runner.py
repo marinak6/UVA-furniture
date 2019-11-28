@@ -43,15 +43,20 @@ class TestSuite(unittest.TestCase):
         self.driver.get(self.home_page)
         self.driver.find_element_by_id("login").click()
         assert "http://web:8000/login" in self.driver.current_url
-        self.driver.find_element_by_id("email").send_keys("testing@test.com")
+        self.driver.find_element_by_id("email").send_keys("test@test.com")
         self.driver.find_element_by_id("login-input").send_keys("password")
         self.driver.find_element_by_id("loginbtn").click()
         print("test_login" + self.driver.current_url)
-        assert "http://web:8000" in self.driver.current_url
+        self.assertEqual("http://web:8000/", self.driver.current_url)
 
     def test_create_listing(self):
         self.home_page = "http://web:8000"
         self.driver.get(self.home_page)
+        self.driver.find_element_by_id("login").click()
+        assert "http://web:8000/login" in self.driver.current_url
+        self.driver.find_element_by_id("email").send_keys("test@test.com")
+        self.driver.find_element_by_id("login-input").send_keys("password")
+        self.driver.find_element_by_id("loginbtn").click()
         self.driver.find_element_by_id("sell").click()
         print("test_create_listing" + self.driver.current_url)
         assert "http://web:8000/create_listing" in self.driver.current_url
