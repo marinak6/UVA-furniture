@@ -49,11 +49,7 @@ def check_login(request):
 @csrf_exempt
 def create_person(request):
     if request.method == 'POST':
-        try:
-            form_data = json.loads(request.body.decode("utf-8"))
-        except:
-            form_data = request.POST
-
+        form_data = request.POST
         try:
             first_name = form_data['first_name']
             last_name = form_data['last_name']
@@ -62,7 +58,7 @@ def create_person(request):
 
             # make sure email isn't already used
             if Person.objects.filter(email=email).count() == 1:
-                raise Exception("Email already taken.")
+                raise Exception("Email already registered")
 
             person = Person.objects.create(
                 first_name=first_name,
@@ -91,7 +87,9 @@ def create_person(request):
             person_dict.pop('password')
             return JsonResponse(person_dict)
         except Exception as error:
-            return JsonResponse({"Microservices Register Error Message": str(error)})
+            return JsonResponse({'ERROR': str(error)})
+    else:
+        return JsonResponse({'ERROR': 'GET request sent to POST API'})
 
 
 @csrf_exempt

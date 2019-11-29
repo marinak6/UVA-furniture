@@ -39,17 +39,16 @@ def register(request):
         form_data = request.POST
         try:
             microservices_url = 'http://microservices:8000/api/v1/person/create'
-            encoded_form_data = urllib.parse.urlencode(
-                form_data).encode('utf-8')
-            request2 = urllib.request.Request(
-                microservices_url, data=encoded_form_data, method='POST')
-            json_respsonse = urllib.request.urlopen(
-                request2).read().decode('utf-8')
-            response = json.loads(json_respsonse)  # redundant?
-            return HttpResponse(json.dumps(response))
+            encoded_form_data = urllib.parse.urlencode(form_data).encode('utf-8')
+            request2 = urllib.request.Request(microservices_url, data=encoded_form_data, method='POST')
+            json_respsonse = urllib.request.urlopen(request2).read().decode('utf-8')
+            response = json.loads(json_respsonse)
+            return JsonResponse(response)
 
         except Exception as error:
-            return JsonResponse({"Experience Service Register Error Message": str(error)})
+            return JsonResponse({'ERROR': str(error)})
+    else:
+        return JsonResponse({'ERROR': 'GET request sent to POST API'})
 
 
 @csrf_exempt

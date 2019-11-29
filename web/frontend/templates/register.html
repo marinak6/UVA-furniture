@@ -1,18 +1,16 @@
 {% extends 'base.html' %} {% block content %}
-{% load static %}
 
-<link rel="stylesheet" href="{% static 'css/form_style.css' %}" />
-
-
-<div class="container">
-  <div class="col-md-6 mx-auto text-center">
-    <div class="header-title">
-      <h1 class="wv-heading--title">
-        Register
-      </h1>
-      <h2 class="wv-heading--subtitle">
-        Get started with UVA Furniture by creating an account!
-      </h2>
+<div class="container" style="margin-bottom:30px">
+  <div class="row">
+    <div class="col-md-6 mx-auto text-center">
+      <div class="header-title" style="margin-top:80px; margin-bottom:40px">
+        <h1 class="wv-heading--title">
+          Register
+        </h1>
+        <h2 class="wv-heading--subtitle">
+          Get started with UVA Furniture by creating an account!
+        </h2>
+      </div>
     </div>
   </div>
   <div class="row">
@@ -20,29 +18,23 @@
       <div class="myform form ">
         <form action="" method="post">
             {% csrf_token %}
-
-            {% if form.subject.errors %}
-            <ol role="alertdialog">
-              {% for error in form.subject.errors %}
-              <li role="alert"><strong>{{ error|escape }}</strong></li>
-              {% endfor %}
-            </ol>
-            {% endif %}
-            
-            {% for field in form %}
-            <div class="fieldWrapper form-group" aria-required={% if field.field.required %}"true"{% else %}"false"{% endif %}>
-              {{ field.label_tag }}{% if field.field.required %}<span class="required">*</span>{% endif %}
-              {{ field }}
-              {% if field.help_text %}
-              <p class="help">{{ field.help_text|safe }}</p>
-              {% endif %}
-            </div>
-            {% endfor %}
-            <input id="submitbtn" type="submit" class="btn btn-primary mb-2" style="margin-top:10%; width:100%;
-    display:block;"value="Submit" />
+            {{ form }}
+            <input type="submit" value="Submit" class="btn btn-primary mb-2" style="margin-top:10%; width:100%; display:block;">
         </form>
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-4 mx-auto">
+      <div class="myform form">
+        {% if ERROR %}
+          <div class="alert alert-danger" role="alert">
+            ERROR: {{ERROR}}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </div>
+
 {% endblock %}
