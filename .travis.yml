@@ -35,9 +35,9 @@ install:
 #   - sleep 600
 script:
   - docker exec -it microservices python manage.py test
-  - docker start selenium-test
-  - sleep 15
-  - docker exec -it selenium-test python selenium_runner.py
-  - sleep 60
+# - docker start selenium-test
+#  - sleep 15
+#  - docker exec -it selenium-test python selenium_runner.py
+  - sleep 100
   - docker logs selenium-test
   # - echo "No tests"
