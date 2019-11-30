@@ -31,6 +31,7 @@ class TestSuite(unittest.TestCase):
     def test_b_register(self):
         self.home_page = "http://web:8000"
         self.driver.get(self.home_page)
+        self.driver.find_element_by_id("login").click()
         self.driver.find_element_by_id("register").click()
         assert "http://web:8000/register" in self.driver.current_url
         self.driver.find_element_by_id(
