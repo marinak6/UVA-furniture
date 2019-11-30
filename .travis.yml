@@ -23,7 +23,6 @@ before_script:
   - docker ps
   - sleep 180
   - docker ps
-  - docker stop selenium-test
   - docker start microservices
   - docker ps
   - sleep 20
