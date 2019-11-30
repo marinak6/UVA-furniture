@@ -125,7 +125,7 @@ def login(request):
             
             # Something went wrong on the experience service level
             if 'error' in response:
-                args = {'error': response['error']}
+                args = {'error': response['error'], 'next_link': request.GET.get('next')}
                 return render(request, "login.html", args)
                 
             # We can now login the User
