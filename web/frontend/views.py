@@ -108,7 +108,9 @@ def login(request):
     auth_user = request.COOKIES.get('authenticator')
     if auth_user:
         return HttpResponseRedirect(reverse('frontend:index'))
-    if(request.method == "POST"):
+        
+    # User submitted the Login form
+    if request.method == "POST":
         received_login_data = request.POST
         login_info = {
             "email": received_login_data['email'],
@@ -116,32 +118,37 @@ def login(request):
         }
         try:
             exp_service_url = 'http://exp:8000/api/v1/login'
-            encoded_login_data = urllib.parse.urlencode(
-                received_login_data).encode('utf-8')
-            request2 = urllib.request.Request(
-                exp_service_url, data=encoded_login_data, method='POST')
-            json_respsonse = urllib.request.urlopen(
-                request2).read().decode('utf-8')
+            encoded_login_data = urllib.parse.urlencode(received_login_data).encode('utf-8')
+            request2 = urllib.request.Request(exp_service_url, data=encoded_login_data, method='POST')
+            json_respsonse = urllib.request.urlopen(request2).read().decode('utf-8')
             response = json.loads(json_respsonse)
-            if "error" in response:
-                args = {'error': "Incorrect credentials"}
+            
+            # Something went wrong on the experience service level
+            if 'error' in response:
+                args = {'error': response['error'], 'next_link': request.GET.get('next')}
                 return render(request, "login.html", args)
-            # we can now log them in
+                
+            # We can now login the User
             authenticator = response['authenticator']
+            
+            # Send the User to the page they attempted to access
             if request.GET.get('next'):
                 response = redirect(request.GET.get('next'))
             else:
                 response = HttpResponseRedirect(reverse('frontend:index'))
+                
+            # A User's cookie is how we authenticate them
             response.set_cookie('authenticator', authenticator)
             return response
         except Exception as error:
             args = {'error': str(error)}
             return render(request, "login.html", args)
+    
+    # User clicked link to Login page
     else:
+        next_link = reverse("frontend:index")
         if request.GET.get('next'):
             next_link = request.GET.get('next')
-        else:
-            next_link = reverse("frontend:index")
         return render(request, 'login.html', {"next_link": next_link})
 
 
@@ -198,25 +205,31 @@ def create_listing(request):
 
 def register(request):
     if request.method == 'POST':
-        register_data = request.POST
-        try:
-            exp_service_url = 'http://exp:8000/api/v1/register'
-            encoded_register_data = urllib.parse.urlencode(
-                register_data).encode('utf-8')
-            request2 = urllib.request.Request(
-                exp_service_url, data=encoded_register_data, method='POST')
-            json_respsonse = urllib.request.urlopen(
-                request2).read().decode('utf-8')
-            response = json.loads(json_respsonse)
-            if "Microservices Register Error Message" in response:
-                raise Exception(
-                    response["Microservices Register Error Message"])
-            return HttpResponseRedirect('login')
-        except Exception as error:
-            form = CreateRegisterForm()
-            args = {'form': form, 'error': str(error)}
-            return render(request, "register.html", args)
+        form = CreateRegisterForm(request.POST)
+        if form.is_valid():
+            valid_data = {
+                'first_name': form.cleaned_data['first_name'],
+                'last_name': form.cleaned_data['last_name'],
+                'email': form.cleaned_data['email'],
+                'password': form.cleaned_data['password']
+            }
+            try:
+                exp_service_url = 'http://exp:8000/api/v1/register'
+                encoded_valid_data = urllib.parse.urlencode(valid_data).encode('utf-8')
+                request2 = urllib.request.Request(exp_service_url, data=encoded_valid_data, method='POST')
+                json_respsonse = urllib.request.urlopen(request2).read().decode('utf-8')
+                response = json.loads(json_respsonse)
+                if 'ERROR' in response:
+                    args = {'form': form, 'ERROR': response['ERROR']}
+                    return render(request, 'register.html', args)
+                    
+                # Register was successful
+                return HttpResponseRedirect('login')
+            except Exception as error:
+                args = {'form': form, 'ERROR': str(error)}
+                return render(request, 'register.html', args)
     else:
         form = CreateRegisterForm()
-        args = {'form': form}
-        return render(request, "register.html", args)
+        
+    # Catches invalid forms and GET requests
+    return render(request, 'register.html', {'form': form})

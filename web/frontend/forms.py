@@ -15,11 +15,7 @@ class CreateListingForm(forms.Form):
 
 
 class CreateRegisterForm(forms.Form):
-    first_name = forms.CharField(label='First Name',
-                                 max_length=30, required=False, widget=forms.TextInput(attrs={'id': 'id_first_name', 'class': 'form-control'}))
-    last_name = forms.CharField(label='Last Name',
-                                max_length=30, required=False, widget=forms.TextInput(attrs={'id': 'id_last_name', 'class': 'form-control'}))
-    password = forms.CharField(
-        label='Password', widget=forms.PasswordInput(attrs={'id': 'id_password', 'class': 'form-control'}))
-    email = forms.EmailField(label='Email', max_length=100, widget=forms.TextInput(
-        attrs={'id': 'id_email', 'class': 'form-control'}))
+    first_name = forms.CharField(label='First Name', min_length=2, max_length=30, widget=forms.TextInput(attrs={'style': 'margin-bottom:10%', 'class': 'form-control'}))
+    last_name = forms.CharField(label='Last Name', min_length=2, max_length=30, widget=forms.TextInput(attrs={'style': 'margin-bottom:10%', 'class': 'form-control'}))
+    email = forms.EmailField(label='Email', min_length=3, max_length=100, widget=forms.TextInput(attrs={'style': 'margin-bottom:10%', 'class': 'form-control'}))
+    password = forms.CharField(label='Password', min_length=3, max_length=30, widget=forms.PasswordInput(attrs={'style': 'margin-bottom:10%', 'class': 'form-control'}))

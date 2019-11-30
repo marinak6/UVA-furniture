@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.views.decorators.csrf import csrf_exempt
 import urllib.request
@@ -8,7 +7,6 @@ import urllib.parse
 import json
 import re
 from elasticsearch import Elasticsearch
-from django.http import JsonResponse
 from kafka import KafkaProducer
 
 # Create your views here.
@@ -32,7 +30,7 @@ def login(request):
             return JsonResponse(response)
 
         except Exception as error:
-            return JsonResponse({"Experience Service Register Error Message": str(error)})
+            return JsonResponse({'error': str(error)})
 
 
 @csrf_exempt
@@ -41,17 +39,16 @@ def register(request):
         form_data = request.POST
         try:
             microservices_url = 'http://microservices:8000/api/v1/person/create'
-            encoded_form_data = urllib.parse.urlencode(
-                form_data).encode('utf-8')
-            request2 = urllib.request.Request(
-                microservices_url, data=encoded_form_data, method='POST')
-            json_respsonse = urllib.request.urlopen(
-                request2).read().decode('utf-8')
-            response = json.loads(json_respsonse)  # redundant?
-            return HttpResponse(json.dumps(response))
+            encoded_form_data = urllib.parse.urlencode(form_data).encode('utf-8')
+            request2 = urllib.request.Request(microservices_url, data=encoded_form_data, method='POST')
+            json_respsonse = urllib.request.urlopen(request2).read().decode('utf-8')
+            response = json.loads(json_respsonse)
+            return JsonResponse(response)
 
         except Exception as error:
-            return JsonResponse({"Experience Service Register Error Message": str(error)})
+            return JsonResponse({'ERROR': str(error)})
+    else:
+        return JsonResponse({'ERROR': 'GET request sent to POST API'})
 
 
 @csrf_exempt

@@ -4,7 +4,9 @@
         "pk": 1,
         "fields": {
             "first_name": "Junie",
-            "last_name": "Jones"
+            "last_name": "Jones",
+            "email": "juniejones@gmail.com",
+            "password": "juniejones123456789"
         }
     },
     {
@@ -19,7 +21,9 @@
         "pk": 4,
         "fields": {
             "first_name": "Stuart",
-            "last_name": "Little"
+            "last_name": "Little",
+            "email": "stuartlittle@gmail.com",
+            "password": "stuartlittle123456789"
         }
     },
     {
@@ -54,7 +58,9 @@
         "pk": 6,
         "fields": {
             "first_name": "Park",
-            "last_name": "Jones"
+            "last_name": "Jones",
+            "email": "parkjones@gmail.com",
+            "password": "parkjones123456789"
         }
     },
     {
@@ -62,7 +68,9 @@
         "pk": 7,
         "fields": {
             "first_name": "Conan",
-            "last_name": "Gray"
+            "last_name": "Gray",
+            "email": "conangray@gmail.com",
+            "password": "conangray123456789"
         }
     },
     {
@@ -70,7 +78,9 @@
         "pk": 8,
         "fields": {
             "first_name": "Cat",
-            "last_name": "Creature"
+            "last_name": "Creature",
+            "email": "catcreature@gmail.com",
+            "password": "catcreature123456789"
         }
     },
     {
