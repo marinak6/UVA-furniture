@@ -24,6 +24,7 @@ def all_pairs(items):
             first_item = items[i]
             second_item = items[j]
             list_tuples.append((first_item, second_item))
+            list_tuples.append((second_item, first_item))
 
     return (list_tuples)
 
@@ -50,7 +51,8 @@ count = pages.reduceByKey(lambda x, y: x+y)
 user_pairs = count.flatMap(lambda x: all_pairs(x[1]))
 pairs_count = user_pairs.map(lambda x: (x, 1))
 count_users = pairs_count.reduceByKey(lambda x, y: x+y)
-result = count_users.collect()
+filtered_results = count_users.filter(lambda x: x[1] > 2)
+result = filtered_results.collect()
 for item_id, count in result:
     print((item_id, count))
 print("Step 3 items done")
