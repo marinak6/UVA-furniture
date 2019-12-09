@@ -113,6 +113,23 @@ def item(request, item_id):
     resp = json.loads(resp_json)
 
     return JsonResponse(resp)
+    
+
+@csrf_exempt
+def item_recommendations(request, item_id):
+    if request.method == 'GET':
+        try:
+            req = urllib.request.Request(
+                'http://microservices:8000/api/v1/recommendation/'+str(item_id))
+            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            resp = json.loads(resp_json)
+            return JsonResponse(resp)
+            
+        except Exception as error:
+            return JsonResponse({'ERROR': str(error)})
+    else:
+        return JsonResponse({'ERROR': 'POST request sent to a GET API'})
+        
 
 
 @csrf_exempt
