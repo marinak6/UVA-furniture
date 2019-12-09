@@ -457,4 +457,4 @@ def get_recommendation(request, id):
                            "recommendations": return_rec_list}
             return JsonResponse(return_json)
         except Exception as ex:
-            return JsonResponse({"Status": str(ex)})
+            return JsonResponse({"ERROR": str(ex)})
