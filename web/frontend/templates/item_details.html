@@ -7,10 +7,10 @@
         <h5 class="card-title" id="item-card-title">{{ item.name }}</h5>
         <div class="card-text" id="item-card-body">
           <ul class="list-group">
-            <li class="list-group-item">Description: {{ item.description }}</li>
-            <li class="list-group-item">Price: ${{ item.price }}</li>
+            <li class="list-group-item"><b>Description:</b> {{ item.description }}</li>
+            <li class="list-group-item"><b>Price:</b> ${{ item.price }}</li>
             <li class="list-group-item">
-              Category:
+              <b>Category:</b>
               <p style="display:inline">
                 {% for c in item.category %} {% if forloop.last %}
                 {{ c }}
