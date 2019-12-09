@@ -23,4 +23,4 @@ while(True):
             view = json.loads((message.value).decode('utf-8'))
 
             f = open("./data/logfile.txt", "a")
-            f.write(str(view["user_id"])+","+str(view["item_id"])+"\n")
+            f.write(str(view["user_id"])+","+str(view["item_id"])+",0"+"\n")
