@@ -33,4 +33,10 @@ urlpatterns = [
 
     path('logout', csrf_exempt(views.logout), name='logout'),
 
+    # recommendations
+    path('recommendation/<int:id>', csrf_exempt(views.get_recommendation),
+         name="get_recommendation"),
+    path('recommendation/create', csrf_exempt(views.create_recommendation),
+         name="create_recommendation"),
+
 ]

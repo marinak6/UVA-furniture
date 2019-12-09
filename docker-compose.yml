@@ -70,19 +70,19 @@ services:
     ports:
       - "9200:9200"
 
-  batch:
-    image: tp33/django
-    container_name: batch
-    volumes:
-      - ./:/app
-    networks:
-      - batch_network
-      - service_mesh
-    depends_on:
-      - kafka
-      - es
-    command: bash -c "python searchIndexer.py & python appendLogfile.py & python parseLogfile.py"
-    restart: on-failure
+  # batch:
+  #   image: tp33/django
+  #   container_name: batch
+  #   volumes:
+  #     - ./:/app
+  #   networks:
+  #     - batch_network
+  #     - service_mesh
+  #   depends_on:
+  #     - kafka
+  #     - es
+  #   command: bash -c "python searchIndexer.py & python appendLogfile.py & python parseLogfile.py"
+  #   restart: on-failure
 
   redis:
     image: redis
@@ -92,42 +92,41 @@ services:
     ports:
       - "6379:6379"
 
-  haproxy:
-    image: haproxy
-    ports:
-      - "80:80"
-      - "443:443"
-    networks:
-      - public
-    depends_on:
-      - web
-      - web2
-    volumes:
-      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
-
-  selenium-chrome:
-    image: selenium/standalone-chrome
-    container_name: selenium-chrome
-    networks:
-      - service_mesh
-      - public
-    ports:
-      - "4444:4444"
-
-  selenium-test:
-    image: tp33/django
-    container_name: selenium-test
-    networks:
-      - service_mesh
-    volumes:
-      - ./app/selenium:/app
-    command: bash -c "sleep 120 && pip install selenium==3.141.0 && python selenium_runner.py"
-
+  # haproxy:
+  #   image: haproxy
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   networks:
+  #     - public
+  #   depends_on:
+  #     - web
+  #     - web2
+  #   volumes:
+  #     - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+  # selenium-chrome:
+  #   image: selenium/standalone-chrome
+  #   container_name: selenium-chrome
+  #   networks:
+  #     - service_mesh
+  #     - public
+  #   ports:
+  #     - "4444:4444"
+  # selenium-test:
+  #   image: tp33/django
+  #   container_name: selenium-test
+  #   networks:
+  #     - service_mesh
+  #   volumes:
+  #     - ./app/selenium:/app
+  #   command: bash -c "sleep 120 && pip install selenium==3.141.0 && python selenium_runner.py"
   spark-master:
     image: gettyimages/spark
     command: bin/spark-class org.apache.spark.deploy.master.Master -h spark-master
     container_name: spark-master
     hostname: spark-master
+    networks:
+      - service_mesh
     environment:
       MASTER: spark://spark-master:7077
       SPARK_CONF_DIR: /conf
@@ -147,12 +146,13 @@ services:
       - 8080:8080
     volumes:
       - ./data:/tmp/data
-
   spark-worker:
     image: gettyimages/spark
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     container_name: spark-worker
     hostname: spark-worker
+    networks:
+      - service_mesh
     environment:
       SPARK_CONF_DIR: /conf
       SPARK_WORKER_CORES: 2
