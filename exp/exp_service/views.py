@@ -123,8 +123,19 @@ def item_recommendations(request, item_id):
                 'http://microservices:8000/api/v1/recommendation/'+str(item_id))
             resp_json = urllib.request.urlopen(req).read().decode('utf-8')
             resp = json.loads(resp_json)
-            return JsonResponse(resp)
             
+            recommendations = []
+            for recomm_id in resp['recommendations']:
+                req2 = urllib.request.Request(
+                    'http://microservices:8000/api/v1/furniture/'+str(recomm_id))
+                resp2_json = urllib.request.urlopen(req2).read().decode('utf-8')
+                resp2 = json.loads(resp2_json)
+                
+                # make sure item actually exists
+                if 'Status' not in resp2:
+                    recommendations.append(resp2)
+                    
+            return JsonResponse({'data': recommendations})
         except Exception as error:
             return JsonResponse({'ERROR': str(error)})
     else:

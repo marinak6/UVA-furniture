@@ -102,7 +102,7 @@ def item_details(request, item_id):
     
     context = {
         'item': item,
-        'recommendations': resp2,
+        'recommendations': resp2['data'],
     }
 
     # logic of status probably needs to change. We should update status for any existing items also
