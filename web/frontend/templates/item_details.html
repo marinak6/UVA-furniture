@@ -23,10 +23,31 @@
       </div>
     </div>
   </div>
-  <div class="container">
-    <div class="row">
-      <div class="col-auto">
-        <p>{{ recommendations }}</p>
+  <div class="album py-5" style="color:black">
+    <div class="container" style="margin-left:20">
+      <div class="row" style="margin-left:0">
+        <h1>Recommended Items</h1>
+      </div>
+      <div class="row" style="max-width:80%">
+        
+        {% for listing in recommendations %}
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow">
+            <img class="card-img-top" src="../static/img/stock.jpeg" alt="Stock">
+            <div class="card-body">
+              <h3 class="card-text">{{ listing.name }}</h3>
+              <p> ${{ listing.price }} </p>
+              <p> {{ listing.description }} </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" onclick="window.location.href='{% url 'frontend:item_details' listing.id %}'" class="btn btn-sm btn-outline-secondary">View</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        
       </div>
     </div>
   </div>
