@@ -93,8 +93,16 @@ def item_details(request, item_id):
         url, data=encode_form, method='POST')
     resp_json = urllib.request.urlopen(new_request).read().decode('utf-8')
     item = json.loads(resp_json)
+    
+    # get item recommendations 
+    req2 = urllib.request.Request(
+        'http://exp:8000/api/v1/recommendations/'+str(item_id))
+    resp2_json = urllib.request.urlopen(req2).read().decode('utf-8')
+    resp2 = json.loads(resp2_json)
+    
     context = {
-        'item': item
+        'item': item,
+        'recommendations': resp2['data'],
     }
 
     # logic of status probably needs to change. We should update status for any existing items also
