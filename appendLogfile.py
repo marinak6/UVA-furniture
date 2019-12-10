@@ -22,5 +22,5 @@ while(True):
         for message in consumer2:
             view = json.loads((message.value).decode('utf-8'))
 
-            f = open("logfile.txt", "a")
+            f = open("./data/logfile.txt", "a")
             f.write(str(view["user_id"])+","+str(view["item_id"])+",0"+"\n")

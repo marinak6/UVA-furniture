@@ -237,3 +237,26 @@ class CreateAuth(TestCase):
             '/api/v1/furniture/create', request)
         res_message = json.loads(response.content.decode("utf-8"))
         self.assertEqual("id" in res_message, False)
+
+
+class CreateRecommendations(TestCase):
+    fixtures = ['fixtures/db.json']
+
+    def setUp(self):
+        self.c = Client()
+
+    def test_make_recommendation(self):
+        request = {
+            "item_id": 3,
+            "recommendations": "9,10"
+        }
+        response = self.c.post(
+            '/api/v1/recommendation/create', request)
+
+        with transaction.atomic():
+            response = self.c.get(
+                '/api/v1/recommendation/3')
+
+        res_message = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(9 in res_message["recommendations"], True)
+        self.assertEqual(10 in res_message["recommendations"], True)

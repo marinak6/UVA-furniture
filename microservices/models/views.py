@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Bid, Furniture, Person, Category, Authenticator
+from .models import Bid, Furniture, Person, Category, Authenticator, Recommendation
 from django.forms.models import model_to_dict
 import json
 import urllib.request
@@ -396,3 +396,65 @@ def auth_to_id(request):
 
         user_id = auth_obj.person_id.id
         return JsonResponse({"user_id": user_id})
+
+
+@csrf_exempt
+def create_recommendation(request):
+    if request.method == "POST":
+        try:
+            received_json_data = json.loads(request.body.decode("utf-8"))
+        except:
+            received_json_data = request.POST
+
+        if received_json_data['item_id']:
+            try:
+                item_id = Furniture.objects.get(
+                    id=received_json_data['item_id'])
+            except:
+                return JsonResponse({"Status": "Item ID Not Found"})
+        recommendations = received_json_data["recommendations"]
+        if type(recommendations) is list:
+            list_rec = []
+            for recommendation in recommendations:
+                list_rec.append(str(recommendation))
+            all_recs = ",".join(list_rec)
+        else:
+            all_recs = recommendations
+
+        if Recommendation.objects.filter(item_id=item_id).count() == 0:
+            rec = Recommendation.objects.create(
+                item_id=item_id,
+                recommendations=all_recs,
+            )
+            rec.save()
+
+        else:
+            rec = Recommendation.objects.get(item_id=item_id)
+            rec.recommendations = all_recs
+            rec.save()
+        return_json = {"item_id": received_json_data['item_id'],
+                       "recommendations": recommendations,
+                       "Status": "Sucess"}
+        return JsonResponse(return_json)
+        # except Exception as ex:
+        #     return JsonResponse({"Status": str(ex)})
+
+
+@csrf_exempt
+def get_recommendation(request, id):
+    if request.method == "GET":
+        try:
+            item_id = id
+            rec = Recommendation.objects.get(item_id=item_id)
+            obj_dict = model_to_dict(rec)
+            recommendations = obj_dict["recommendations"].split(",")
+
+            return_rec_list = []
+            for recommendation in recommendations:
+                return_rec_list.append(int(recommendation))
+
+            return_json = {"item_id": item_id,
+                           "recommendations": return_rec_list}
+            return JsonResponse(return_json)
+        except Exception as ex:
+            return JsonResponse({"ERROR": str(ex)})

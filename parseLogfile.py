@@ -12,11 +12,11 @@ while not es_connected:
         es_connected = True
 while(True):
     # Pull new messages from Kafka
-    time.sleep(600)
+    time.sleep(100)
     es.ping()
-    with open("logfile.txt", 'r') as f:
+    with open("./data/logfile.txt", 'r') as f:
         get_all = f.readlines()
-    with open("logfile.txt", 'w') as f:
+    with open("./data/logfile.txt", 'w') as f:
         for i, line in enumerate(get_all, 1):
             split_line = line.split(",")
             if split_line[-1][0] == "0":

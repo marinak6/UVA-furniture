@@ -70,3 +70,11 @@ class Furniture(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Recommendation(models.Model):
+    item_id = models.ForeignKey(
+        Furniture,
+        on_delete=models.CASCADE,
+    )
+    recommendations = models.CharField(max_length=200, null=True, blank=True,)
