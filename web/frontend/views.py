@@ -93,17 +93,21 @@ def item_details(request, item_id):
         url, data=encode_form, method='POST')
     resp_json = urllib.request.urlopen(new_request).read().decode('utf-8')
     item = json.loads(resp_json)
-    
-    # get item recommendations 
+
+    # get item recommendations
     req2 = urllib.request.Request(
         'http://exp:8000/api/v1/recommendations/'+str(item_id))
     resp2_json = urllib.request.urlopen(req2).read().decode('utf-8')
     resp2 = json.loads(resp2_json)
-    
-    context = {
-        'item': item,
-        'recommendations': resp2['data'],
-    }
+    if 'data' not in resp2:
+        context = {
+            'item': item,
+        }
+    else:
+        context = {
+            'item': item,
+            'recommendations': resp2['data'],
+        }
 
     # logic of status probably needs to change. We should update status for any existing items also
     if("Status" in context['item']):
@@ -116,7 +120,7 @@ def login(request):
     auth_user = request.COOKIES.get('authenticator')
     if auth_user:
         return HttpResponseRedirect(reverse('frontend:index'))
-        
+
     # User submitted the Login form
     if request.method == "POST":
         received_login_data = request.POST
@@ -126,32 +130,36 @@ def login(request):
         }
         try:
             exp_service_url = 'http://exp:8000/api/v1/login'
-            encoded_login_data = urllib.parse.urlencode(received_login_data).encode('utf-8')
-            request2 = urllib.request.Request(exp_service_url, data=encoded_login_data, method='POST')
-            json_respsonse = urllib.request.urlopen(request2).read().decode('utf-8')
+            encoded_login_data = urllib.parse.urlencode(
+                received_login_data).encode('utf-8')
+            request2 = urllib.request.Request(
+                exp_service_url, data=encoded_login_data, method='POST')
+            json_respsonse = urllib.request.urlopen(
+                request2).read().decode('utf-8')
             response = json.loads(json_respsonse)
-            
+
             # Something went wrong on the experience service level
             if 'error' in response:
-                args = {'error': response['error'], 'next_link': request.GET.get('next')}
+                args = {'error': response['error'],
+                        'next_link': request.GET.get('next')}
                 return render(request, "login.html", args)
-                
+
             # We can now login the User
             authenticator = response['authenticator']
-            
+
             # Send the User to the page they attempted to access
             if request.GET.get('next'):
                 response = redirect(request.GET.get('next'))
             else:
                 response = HttpResponseRedirect(reverse('frontend:index'))
-                
+
             # A User's cookie is how we authenticate them
             response.set_cookie('authenticator', authenticator)
             return response
         except Exception as error:
             args = {'error': str(error)}
             return render(request, "login.html", args)
-    
+
     # User clicked link to Login page
     else:
         next_link = reverse("frontend:index")
@@ -223,14 +231,17 @@ def register(request):
             }
             try:
                 exp_service_url = 'http://exp:8000/api/v1/register'
-                encoded_valid_data = urllib.parse.urlencode(valid_data).encode('utf-8')
-                request2 = urllib.request.Request(exp_service_url, data=encoded_valid_data, method='POST')
-                json_respsonse = urllib.request.urlopen(request2).read().decode('utf-8')
+                encoded_valid_data = urllib.parse.urlencode(
+                    valid_data).encode('utf-8')
+                request2 = urllib.request.Request(
+                    exp_service_url, data=encoded_valid_data, method='POST')
+                json_respsonse = urllib.request.urlopen(
+                    request2).read().decode('utf-8')
                 response = json.loads(json_respsonse)
                 if 'ERROR' in response:
                     args = {'form': form, 'ERROR': response['ERROR']}
                     return render(request, 'register.html', args)
-                    
+
                 # Register was successful
                 return HttpResponseRedirect('login')
             except Exception as error:
@@ -238,6 +249,6 @@ def register(request):
                 return render(request, 'register.html', args)
     else:
         form = CreateRegisterForm()
-        
+
     # Catches invalid forms and GET requests
     return render(request, 'register.html', {'form': form})
