@@ -1,4 +1,6 @@
 # UVA-furniture
+# Overview
+This web application serves as a platform for UVA students to sell, bid, and buy furniture from one another.
 
 # Project 2 Checkpoint
 
